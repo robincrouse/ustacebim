@@ -250,3 +250,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  .auth-method-help{text-align:center;margin-top:9px}
  .auth-card-horizontal .auth-preview-notice{text-align:center}
 }
+
+/* Email verification registration fields */
+.auth-card-horizontal .auth-consent{display:flex;align-items:flex-start;gap:9px;line-height:1.5;font-size:11px;color:#587080;margin:10px 0}
+.auth-card-horizontal .auth-consent input{width:17px;height:17px;flex:0 0 17px;margin:0}
+.auth-form-status{font-size:12px;line-height:1.5;margin:9px 0 0;color:#627581}
+.auth-form-status[data-state="success"]{color:#087766}
+.auth-form-status[data-state="error"]{color:#b1413d}
