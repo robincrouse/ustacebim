@@ -165,3 +165,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .preview-offer-form label{margin:15px 0}
 .preview-offer-form textarea{min-height:90px}
 @media(max-width:660px){.preview-backdrop{padding:0;align-items:flex-end}.preview-sheet{border-radius:18px 18px 0 0;max-height:91vh;padding:23px 18px calc(22px + env(safe-area-inset-bottom))}.opportunity-explainer{padding:14px}.opportunity-explainer>span{font-size:20px}}
+
+/* Focused sign-in / registration page */
+.auth-layout.auth-layout-simple{display:block;max-width:490px;min-height:0;margin:46px auto 72px}
+.auth-layout-simple .auth-card{border-radius:19px;padding:34px 36px}
+.auth-layout-simple .auth-card h1{font-size:30px;margin-top:8px}
+.auth-layout-simple .auth-card>p{font-size:13px;margin-bottom:0}
+.auth-layout-simple .auth-tabs{margin:23px 0 20px}
+.auth-layout-simple .social-btn{min-height:48px}
+@media(max-width:660px){.auth-layout.auth-layout-simple{margin:22px auto 48px}.auth-layout-simple .auth-card{padding:23px 20px;border-radius:15px}.auth-layout-simple .auth-card h1{font-size:27px}}
