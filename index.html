@@ -8,12 +8,12 @@
 <script src="./assets/app.js" defer></script>
 </head>
 <body>
-<div class="topstrip">ANKARA PİLOTU <span>•</span> Arayüz önizlemesi — gerçek üyelik ve ödeme henüz açık değil</div>
+<div class="topstrip">Ankara pilot sürümü · İşlem ve üyelikler şu anda test aşamasında</div>
 <header class="site-header"><div class="shell header-inner">
 <a class="brand" href="#anasayfa" aria-label="UstaCebim ana sayfa"><span class="brand-mark">u<span>c</span></span><span>usta<strong>cebim</strong></span></a>
 <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navlinks" aria-label="Menüyü aç">☰</button>
 <nav id="navlinks" class="nav-links" aria-label="Ana menü">
-<a href="#anasayfa" data-nav>Keşfet</a><a href="#hizmetler" data-nav>Hizmetler</a><a href="#talepler" data-nav>İş Talepleri</a><a href="#ustalar" data-nav>Ustalar</a><a href="#paketler" data-nav>Paketler</a><a href="#panel" data-nav>Panelim</a>
+<a href="#anasayfa" data-nav>Ana Sayfa</a><a href="#hizmetler" data-nav>Hizmet Bul</a><a href="#talepler" data-nav>İş Talepleri</a><a href="#ustalar" data-nav>Ustalar</a><a href="#paketler" data-nav>Paketler</a><a href="#panel" data-nav>Hesabım</a>
 </nav>
 <div class="nav-actions"><button class="btn btn-ghost" data-page="giris">Giriş Yap</button><button class="btn btn-primary btn-sm" data-page="talep-olustur">Ücretsiz Talep Oluştur <span aria-hidden="true">↗</span></button></div>
 </div></header>
@@ -21,15 +21,15 @@
 <section id="anasayfa" class="page">
 <div class="hero">
 <div class="hero-copy"><div class="eyebrow"><span class="live-dot"></span> Ankara'da doğru hizmeti bulmanın kolay yolu</div>
-<h1>İşin ustasına <em>ulaş.</em><br>İçin rahat olsun.</h1>
-<p>İhtiyacını birkaç adımda anlat, sana uygun ustaları keşfet ve teklifleri karşılaştır. Birlikte daha iyi bir hizmet deneyimi tasarlıyoruz.</p>
-<div class="hero-actions"><button class="btn btn-accent" data-page="talep-olustur">Ücretsiz Talep Oluştur <span>→</span></button><button class="btn btn-outline-light" data-page="usta-kayit">Hizmet Veren Ol</button></div>
-<div class="hero-pills"><span>✓ Ücretsiz talep</span><span>✓ Usta profilleri</span><span>✓ Teklif karşılaştırma</span></div></div>
+<h1>İhtiyacın olan <em>ustayı bul.</em></h1>
+<p>İşini anlat, teklifleri karşılaştır, sana uygun ustayı seç. Hepsi tek yerden.</p>
+<div class="hero-actions"><button class="btn btn-accent" data-page="talep-olustur">Hizmet Talebi Oluştur <span>→</span></button><button class="btn btn-outline-light" data-page="hizmetler">Hizmetlere Göz At</button></div>
+<div class="hero-pills"><span>✓ Talep oluşturmak ücretsiz</span><span>✓ Ankara pilotu</span></div></div>
 <div class="hero-visual"><div class="orb orb1"></div><div class="orb orb2"></div><div class="floating-card task-preview"><div class="preview-icon">🔧</div><div><small>HİZMET TALEBİ</small><strong>Evde su tesisatı onarımı</strong><span>📍 Çankaya, Ankara</span></div><span class="preview-check">✓</span></div><div class="floating-card pro-preview"><div class="avatar">U</div><div><small>USTA PROFİLİ</small><strong>Alanında uzman ustalar</strong><span>Deneyim • Hizmet bölgesi • Portföy</span></div></div><div class="orbit-symbol">✳</div></div>
 </div>
-<div class="section-heading"><div><span class="overline">KATEGORİLER</span><h2>Hangi hizmete ihtiyacın var?</h2><p>En çok aranan hizmetlerden birini seçerek başla.</p></div><a href="#hizmetler" class="text-link">Tüm hizmetler →</a></div><div class="category-grid" id="featuredCategories"></div>
+<div class="section-heading"><div><span class="overline">HİZMETLER</span><h2>Ne yaptırmak istiyorsun?</h2><p>Bir kategori seç ve hemen başla.</p></div><a href="#hizmetler" class="text-link">Tümünü gör →</a></div><div class="category-grid" id="featuredCategories"></div>
 <div class="steps-section"><div class="section-heading"><div><span class="overline">3 KOLAY ADIM</span><h2>Nasıl çalışır?</h2></div></div><div class="steps-grid"><article class="step"><div class="step-count">01</div><div class="step-icon">✍️</div><h3>İhtiyacını anlat</h3><p>Yapılacak işi ve bulunduğun ilçeyi birkaç cümleyle paylaş.</p></article><article class="step"><div class="step-count">02</div><div class="step-icon">📨</div><h3>Teklifleri incele</h3><p>Ustaların profillerini, deneyimlerini ve tekliflerini karşılaştır.</p></article><article class="step"><div class="step-count">03</div><div class="step-icon">🤝</div><h3>Ustanı seç</h3><p>Sana en uygun hizmet verenle anlaş ve işi planla.</p></article></div></div>
-<div class="cta-banner"><div><span class="overline">USTALAR İÇİN</span><h2>İşini büyütmeye hazır mısın?</h2><p>Hizmetlerini sergile, uzmanlık alanlarını seç ve yeni müşterilere ulaş.</p></div><button class="btn btn-accent" data-page="usta-kayit">Usta Profili Oluştur →</button></div>
+<div class="cta-banner"><div><span class="overline">HİZMET VERENLER</span><h2>Sen de usta olarak katıl.</h2><p>Uzmanlığını tanıt, yeni iş fırsatlarını keşfet.</p></div><button class="btn btn-accent" data-page="usta-kayit">Usta Ol →</button></div>
 </section>
 <section id="hizmetler" class="page hidden"><div class="page-intro"><span class="overline">HİZMET REHBERİ</span><h1>Hizmet kategorileri</h1><p>İhtiyacın olan hizmeti bul, talep formunu hemen doldur.</p></div><div class="searchbar"><label class="sr-only" for="categorySearch">Kategori ara</label><input id="categorySearch" placeholder="Örn. elektrikçi, temizlik, boya..." autocomplete="off"></div><div id="allCategories" class="category-grid"></div></section>
 <section id="talepler" class="page hidden"><div class="page-intro"><span class="overline">AÇIK İŞLER</span><h1>Hizmet talepleri</h1><p>Bu listedeki talepler tanıtım amaçlı örnek kayıtlardır. Gerçek teklif ve müşteri bağlantısı henüz aktif değil.</p></div><div class="filters"><select id="requestCategory" aria-label="Mesleğe göre filtre"><option value="">Tüm kategoriler</option></select><select id="requestDistrict" aria-label="İlçeye göre filtre"><option value="">Tüm ilçeler</option></select><button class="btn btn-primary" data-page="talep-olustur">+ Yeni Talep</button></div><div class="request-list" id="requestList"></div></section>
@@ -43,5 +43,6 @@
 <section id="panel" class="page hidden"><div class="page-intro"><span class="overline">KULLANICI PANELİ</span><h1>Kontrol panelim</h1><p>Talep ve profil taslaklarını görüntüle. Gerçek hesap ve abonelik yönetimi henüz aktif değil.</p></div><div class="dashboard"><aside class="dash-menu"><button data-dash="overview" class="active">▦ Genel Bakış</button><button data-dash="requests">▤ Taleplerim</button><button data-dash="profile">♙ Usta Profilim</button><button data-dash="credits">◈ Teklif Haklarım</button></aside><div id="dashboardContent" class="dash-main"></div></div></section>
 <section id="not-found" class="page hidden"><div class="empty-state"><h1>Sayfa bulunamadı</h1><p>Aradığın sayfa mevcut değil.</p><button class="btn btn-primary" data-page="anasayfa">Ana Sayfaya Dön</button></div></section>
 </main>
+<nav class="mobile-bottom-nav" aria-label="Mobil hızlı gezinme"><a href="#anasayfa" data-mobile-nav><span aria-hidden="true">⌂</span><strong>Ana Sayfa</strong></a><a href="#hizmetler" data-mobile-nav><span aria-hidden="true">⌕</span><strong>Hizmetler</strong></a><a href="#talep-olustur" data-mobile-nav class="mobile-main-action"><span aria-hidden="true">＋</span><strong>Talep Aç</strong></a><a href="#talepler" data-mobile-nav><span aria-hidden="true">▤</span><strong>İşler</strong></a><a href="#panel" data-mobile-nav><span aria-hidden="true">♙</span><strong>Hesabım</strong></a></nav>
 <footer class="footer"><div class="shell footer-grid"><div><div class="brand brand-footer"><span class="brand-mark">u<span>c</span></span><span>usta<strong>cebim</strong></span></div><p>Güvenle hizmet bul, işini büyüt.<br>Ankara pilot proje önizlemesi.</p></div><div><strong>Keşfet</strong><a href="#hizmetler">Hizmetler</a><a href="#ustalar">Ustalar</a><a href="#talepler">İş talepleri</a></div><div><strong>Hesabım</strong><a href="#giris">Giriş yap</a><a href="#usta-kayit">Hizmet veren ol</a><a href="#panel">Panelim</a></div><div><strong>Bilgilendirme</strong><p>Bu sürüm arayüz testidir. Gerçek kayıt, SMS, ödeme, fatura veya teklif gönderimi yapılmaz.</p></div></div><div class="shell footer-bottom">© 2026 UstaCebim · Geçici proje adı · Çizmece projesinden bağımsız</div></footer>
 </body></html>
