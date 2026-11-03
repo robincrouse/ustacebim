@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#132f41"><meta name="description" content="UstaCebim Ankara pilot — hizmet bulma ve teklif platformu arayüz önizlemesi.">
 <title>UstaCebim | Hizmet bul, teklif al</title>
 <link rel="stylesheet" href="./assets/style.css?v=auth-layout-3">
-<script src="./assets/app.js?v=auth-layout-3" defer></script>
+<script src="./assets/app.js?v=email-verify-1" defer></script>
 </head>
 <body>
 <div class="topstrip">Ankara pilot sürümü · İşlem ve üyelikler şu anda test aşamasında</div>
@@ -52,12 +52,14 @@
           <label>Şifre<input type="password" autocomplete="current-password" placeholder="Şifreniz" disabled></label>
           <button type="button" class="btn btn-primary full" disabled>Giriş Yap</button>
         </div>
-        <div id="authRegister" class="hidden">
-          <label>Ad Soyad<input autocomplete="name" placeholder="Adınız Soyadınız" disabled></label>
-          <label>E-posta<input type="email" autocomplete="email" placeholder="E-posta adresiniz" disabled></label>
-          <label>Şifre<input type="password" autocomplete="new-password" placeholder="Şifreniz" disabled></label>
-          <button type="button" class="btn btn-primary full" disabled>Kayıt Ol</button>
-        </div>
+        <form id="authRegister" class="hidden">
+          <label>Ad Soyad<input name="name" autocomplete="name" minlength="2" maxlength="120" placeholder="Adınız Soyadınız" required disabled></label>
+          <label>E-posta<input name="email" type="email" autocomplete="email" maxlength="254" placeholder="E-posta adresiniz" required disabled></label>
+          <label>Şifre<input name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" placeholder="En az 12 karakter" required disabled></label>
+          <label class="auth-consent"><input name="terms" type="checkbox" required disabled><span>Test üyeliği oluşturulması ve e-posta doğrulaması için bu bilgilerin kullanılacağını anladım.</span></label>
+          <button id="emailRegisterSubmit" type="submit" class="btn btn-primary full" disabled>Kayıt Ol ve Onay E-postası Gönder</button>
+          <p id="emailRegisterStatus" class="auth-form-status" aria-live="polite"></p>
+        </form>
       </div>
       <div class="auth-method-column">
         <div class="auth-method-title">Diğer giriş seçenekleri</div>
@@ -69,7 +71,7 @@
         <p class="auth-method-help">Google, Apple ve SMS doğrulaması gerçek üyelik açıldığında kullanılabilecek.</p>
       </div>
     </div>
-    <p class="auth-preview-notice">Test sürümü · Gerçek üyelik ve şifre doğrulaması henüz aktif değil.</p>
+    <p class="auth-preview-notice" id="authServiceNotice">Test sürümü · Kayıt için e-posta sunucusunun kurulması gerekiyor. Şifreyle giriş henüz aktif değil.</p>
   </div>
 </div>
 </section>
