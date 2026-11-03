@@ -31,8 +31,8 @@ Durum: Ücretsiz deneme için **15 teklif hakkı kararlaştırıldı**. Bu dosya
 - `quotes` ve `service_requests` mevcut şeması kabul edilen teklifi temsil etmeye yeterlidir; bu kural için yeni tablo zorunlu değildir. Asıl güvenlik koşulu **sunucu API yetki kontrolüdür**, tarayıcı arayüzü değildir.
 
 ## 4. Ücretli abonelikler (henüz onaylanmamış taslak)
-- Mevcut önizleme: Başlangıç **299 TL / ay, 10 hak / ay**; Profesyonel **599 TL / ay, 30 hak / ay**; Kurumsal **999 TL / ay, 70 hak / ay**. Yıllık tutarlar ve ek paketler de taslaktır.
-- 15 tekliflik ücretsiz başlangıçtan sonra 10 haklık ücretli Başlangıç paketi algısal olarak zayıf kalabilir. **Fiyat ve hak sayıları canlı tahsilat açılmadan ayrı kararlaştırılmalıdır**. Şimdilik veritabanındaki tutarları değiştirmeyin.
+- Güncel pilot önerisi: Başlangıç **299 TL / ay, 20 hak / ay**; Profesyonel **599 TL / ay, 50 hak / ay**; Kurumsal **999 TL / ay, 100 hak / ay**. Yıllık tutarlar ve ek paketler de taslaktır.
+- Bu rakamlar pilot için kabul edilen planlamadır; gerçek ödeme açılmadan önce vergi, iade ve fiyatlandırma metinleri onaylanmalıdır. Değişiklikler **005_marketplace_flow.sql** ile mevcut abonelik planı kayıtlarına uygulanır.
 - Ücretli aylık haklar her dönem başında bir kez grant edilir. Yıllık aboneliklerde 12 aylık hak tek seferde verilmez; her ay yenilenir. Ek hak satın alma kuralları ayrıca netleştirilir.
 - Ödeme alınmadan `active` üyelik açılmaz. Havale dekontu tek başına ödeme onayı değildir.
 
@@ -61,3 +61,16 @@ Durum: Ücretsiz deneme için **15 teklif hakkı kararlaştırıldı**. Bu dosya
 
 ## 7. Sıradaki geliştirme
 Node.js + MariaDB API ile `professional_trials` ve `quote_credit_ledger` transaction'ları, usta doğrulaması, teklif politikaları, moderasyon paneli; Netgsm OTP kapalı kalırken yalnız geliştirme ortamında simüle edilen kimlik doğrulama. Canlı kullanıcılara sahte SMS/kod gönderilmiş gibi gösterilmeyecek.
+
+## 8. Uygulama akışı (müşteri → usta → müşteri)
+1. Müşteri kendi oturumundan talebi gönderir. Talep uygun meslek, ilçe ve moderasyon kontrollerinden geçince `service_requests.status='open'` olur.
+2. `professional_professions` ve `professional_areas` tablolarına göre eşleşen **onaylanmış**, erişime açık ustalara `request_matches` kaydı açılır. `notifications` tablosunda kişisel iletişim bilgisi olmadan uygulama içi bildirim oluşturulur. Çift teslimat aynı ilan için ikinci eşleşme üretmez.
+3. Usta iş fırsatını **ücretsiz görüntüler**. İstemiyorsa `dismissed` yapabilir ve hak harcamaz.
+4. Usta fiyat ve açıklama girerek **Teklif Ver** der. Sunucu teklif uygunluk kontrolü, 15 ücretsiz hak veya ücretli bakiye denetimini transaction içinde yapar; `quotes` kaydı ve `quote_credit_ledger` için **-1** hareketi birlikte onaylanır. Başarısız/tekrarlı istekte hak düşmez.
+5. Müşteri teklifleri kendi panelinden görür. Sadece kendi talebindeki **bir** teklifi onaylar. Müşterinin seçtiği ustadan başka hiç kimse müşterinin telefonunu göremez; iletişim bilgisi gizli API üzerinden yetki kontrolüyle sağlanır.
+6. İş tamamlandığında müşteri ve usta ayrı ayrı onaylar. Müşteri ustayı `customer_favorite_professionals` ile favorileyebilir.
+7. Aynı müşteri, **daha önce kabul ettiği bir ustaya** yeniden iş daveti gönderebilir. `repeat_service_invitations` kullanılır; bu doğrudan davet **teklif hakkı tüketmez**. Teklif verme ücretinden kaçınmak için tanımadığı bir ustaya ücretsiz doğrudan davet açamaz.
+8. Fiyat, ödeme, telefon numarası, rol, kalan hak ve talep sahibi yetkileri **istemciden değil sunucu oturumundan** türetilir.
+
+### Kayıt / üretim durumu
+`005_marketplace_flow.sql` yeni tabloları oluşturur ve pilot fiyat/limitlerini günceller. Statik HTML önizlemesi gerçek `notifications`, `quotes` veya bakiye tablolarını **henüz kullanmaz**. Uygulama ve API bağlanmadan gerçek SMS/push, fiyat teklifi, iş kabulü veya telefon açma işlemi yapılmaz.
