@@ -78,3 +78,13 @@
  .mobile-bottom-nav .mobile-main-action{padding-top:2px}
  .mobile-bottom-nav .mobile-main-action.active{background:#edf8f4}
 }
+
+/* Trial + 3 paid plan preview cards. */
+.pricing-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.price-card{padding:22px;min-width:0}
+.price-card .price{font-size:clamp(22px,2vw,29px)}
+.price-card .btn{white-space:normal;text-align:center}
+.price-card.trial-card{border:2px solid #0e8179;background:linear-gradient(180deg,#f3fffa,#fff 40%)}
+.price-card.trial-card .tag{margin-bottom:11px}
+@media(max-width:1100px){.pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:660px){.pricing-grid{grid-template-columns:1fr}.price-card{padding:22px}}
