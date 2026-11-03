@@ -12,7 +12,7 @@ return [
     'smtp_port' => 587, // 587 = STARTTLS; 465 = SMTPS
     'smtp_user' => 'REPLACE_WITH_SMTP_USER',
     'smtp_password' => 'REPLACE_WITH_SMTP_PASSWORD',
-    'mail_from' => 'REPLACE_WITH_VERIFIED_SENDER_EMAIL',
+    'mail_from' => 'info@cizmece.xyz',
     // Composer: composer require phpmailer/phpmailer --no-dev
     // Install outside httpdocs and set absolute path to vendor/autoload.php.
     'mailer_autoload' => '/var/www/vhosts/YOUR-DOMAIN/private/ustacebim-mailer/vendor/autoload.php',
