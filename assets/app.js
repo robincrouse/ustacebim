@@ -32,7 +32,7 @@ const mockPros=[
 {id:5,name:'Örnek Klima Servisi',profession:'Klima Servisi',district:'Etimesgut',exp:10,bio:'Klima bakım, onarım ve montaj konularında örnek hizmet profili.',initial:'K'},
 {id:6,name:'Örnek Montaj Ustası',profession:'Mobilya Montajı',district:'Mamak',exp:8,bio:'Mobilya montajı ve küçük ev tamiratlarına yönelik tanıtım profili.',initial:'M'}
 ];
-const plans=[{name:'Başlangıç',monthly:299,yearly:2870,credits:10,cats:1,areas:1},{name:'Profesyonel',monthly:599,yearly:5750,credits:30,cats:3,areas:5},{name:'Kurumsal',monthly:999,yearly:9590,credits:70,cats:10,areas:'Sınırsız'}];
+const plans=[{name:'Başlangıç',monthly:299,yearly:2870,credits:20,cats:1,areas:1},{name:'Profesyonel',monthly:599,yearly:5750,credits:50,cats:3,areas:5},{name:'Kurumsal',monthly:999,yearly:9590,credits:100,cats:10,areas:'Sınırsız'}];
 const trialPlan={name:'30 Gün Ücretsiz',credits:15,cats:2,areas:3,days:30};
 const extras=[[5,199],[15,499],[30,899]];
 const storageKey='ustacebim-ui-preview-v2';
@@ -77,7 +77,39 @@ function route(){go(decodeURIComponent(location.hash.slice(1)||'anasayfa'))}
 window.addEventListener('hashchange',route);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(!b)return;const target=b.getAttribute('data-page');if(location.hash==='#'+target)go(target);else location.hash=target});
 $('#menuToggle').addEventListener('click',()=>{const open=$('#navlinks').classList.toggle('open');$('#menuToggle').setAttribute('aria-expanded',String(open))});
-function requestCard(r){const card=node('article','request-card');add(card,sampleTag(),node('h3','',r.title),node('p','',r.description));const meta=node('div','request-foot');const left=node('span','',r.category+' · '+r.district+' / Ankara');const btn=button('Detayları Gör →','btn btn-primary',()=>{alert('Önizleme sürümü: Gerçek teklif gönderme sistemi henüz aktif değildir.')});add(meta,left,btn);card.appendChild(meta);if(!r.example){card.querySelector('.tag').textContent='Yerel taslak'}return card}
+function requestCard(r){
+ const card=node('article','request-card');
+ const tag=node('span','tag',r.example?'Örnek iş fırsatı':'Yalnız bu tarayıcıdaki taslak');
+ add(card,tag,node('h3','',r.title),node('p','',r.description));
+ const meta=node('div','request-foot');
+ const left=node('span','',r.category+' · '+r.district+' / Ankara');
+ const btn=button('İşi İncele →','btn btn-primary',()=>previewOpportunity(r));
+ add(meta,left,btn);card.append(meta);return card
+}
+function previewOpportunity(request){
+ const backdrop=node('div','preview-backdrop'),sheet=node('section','preview-sheet');
+ sheet.setAttribute('role','dialog');sheet.setAttribute('aria-modal','true');sheet.setAttribute('aria-label','İş fırsatı önizlemesi');
+ const close=()=>{document.removeEventListener('keydown',onKey);backdrop.remove()};
+ const onKey=e=>{if(e.key==='Escape')close()};
+ document.addEventListener('keydown',onKey);
+ backdrop.addEventListener('click',e=>{if(e.target===backdrop)close()});
+ const head=node('div','preview-sheet-top');
+ add(head,node('span','overline','İŞ FIRSATI · TASARIM ÖNİZLEMESİ'),button('✕','preview-close',close));
+ add(sheet,head,node('h2','',request.title),node('p','opportunity-meta','📍 '+request.district+', Ankara · '+request.category),node('p','',request.description));
+ const note=node('div','info-note','Telefon numarası ve açık adres gizlidir. Gerçek sistemde teklifin başarıyla gönderildiğinde 1 hakkın düşecek. Bu önizlemede hiçbir hak düşmez ve müşteriye teklif gitmez.');
+ sheet.append(note);
+ const form=node('form','preview-offer-form');
+ const priceLabel=node('label','', 'Teklif tutarın (TL)');
+ const price=node('input');price.type='number';price.min='1';price.max='10000000';price.required=true;price.placeholder='Örn. 2500';
+ priceLabel.append(price);
+ const messageLabel=node('label','', 'Teklif açıklaman');
+ const message=node('textarea');message.maxLength=500;message.minLength=10;message.required=true;message.placeholder='İşi ne zaman ve nasıl yapabileceğini kısaca anlat.';
+ messageLabel.append(message);
+ const submit=node('button','btn btn-primary full','Teklifi Önizle — 1 Hak');submit.type='submit';
+ form.append(priceLabel,messageLabel,submit);
+ form.addEventListener('submit',e=>{e.preventDefault();showToast(formatTL(Number(price.value))+' teklif önizlendi. Gerçek teklif gönderilmedi, hak düşmedi.');close()});
+ sheet.append(form);backdrop.append(sheet);document.body.append(backdrop);price.focus()
+}
 function renderRequests(){const root=$('#requestList');root.replaceChildren();const cf=$('#requestCategory').value,df=$('#requestDistrict').value;const matches=[...saved.requests,...mockRequests].filter(x=>(!cf||x.category===cf)&&(!df||x.district===df));matches.forEach(r=>root.append(requestCard(r)));if(!matches.length)root.append(node('div','empty-state','Bu filtrelerde talep bulunamadı.'))}
 $('#requestCategory').onchange=renderRequests;$('#requestDistrict').onchange=renderRequests;
 $('#requestForm').addEventListener('submit',e=>{e.preventDefault();const category=$('#formCategory').value,district=$('#formDistrict').value,title=$('#formTitle').value.trim(),description=$('#formDetails').value.trim();if(title.length<5||description.length<15){$('#requestStatus').textContent='Lütfen başlığı ve açıklamayı biraz daha ayrıntılı yaz.';return}const r={id:'local-'+Date.now(),category,district,title,description,budget:$('#formBudget').value||null,date:$('#formDate').value||null,createdAt:new Date().toISOString(),example:false};saved.requests.unshift(r);persist();e.target.reset();$('#requestStatus').textContent='Talep tarayıcına demo olarak kaydedildi; sunucuya gönderilmedi.';location.hash='talepler'});
