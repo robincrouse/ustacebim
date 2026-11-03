@@ -18,13 +18,25 @@ Durum: Ücretsiz deneme için **15 teklif hakkı kararlaştırıldı**. Bu dosya
 - Bir iş talebi için `max_quotes` kadar teklif varsa yeni teklifler durur. Talep açık/uygun meslek ve bölge eşleşmesi gerekir.
 - Deneme kredisi yalnızca deneme süresi içinde harcanabilir; `quote_credit_ledger` toplamının pozitif olması tek başına süresi dolan denemede harcama yetkisi vermez.
 
-## 3. Ücretli abonelikler (henüz onaylanmamış taslak)
+## 3. Teklif kabulü ve iletişim bilgilerinin açılması
+- Müşterinin telefon numarası, açık hizmet talebinde, iş fırsatı bildiriminde, diğer ustaların profilinde veya teklif ekranında **asla gösterilmez**.
+- Usta teklif gönderdiğinde 1 hak düşer. Müşterinin daha sonra teklifi kabul etmesiyle **ek kredi düşmez**. İşi görüntülemek, bildirimi açmak, ilgilenmek veya teklifini düzenlemek ücretsizdir.
+- Müşteri fiyat ve usta bilgilerini inceledikten sonra **yalnız bir teklifi** kabul edebilir. Kabul, talep sahibinin giriş yapmış oturumundan ve sunucuda transaction içinde yapılır.
+- Kabul edilen teklif `quotes.status='accepted'`, `service_requests.accepted_quote_id=quotes.id`, talep durumu `matched` olur. Aynı talebin başka teklifi yanlışlıkla eşzamanlı kabul edilmemelidir; diğerleri `declined` yapılabilir.
+- **Telefon numarası yalnızca kabul edilen teklifin sahibi ustaya**, bu kabul sonrasında yetki kontrolüyle ayrı bir `GET /api/requests/:id/contact` gibi kimlik doğrulamalı API çağrısında döner. Diğer ustalar ve anonim ziyaretçiler bu API'de 403 alır. İlgili müşteri kendi iletişim bilgisine erişebilir.
+- Telefon numarası istemciye talep listeleme, bildirim, websocket, HTML veri özniteliği veya arama dizini içinde önceden gönderilmez; CSS ile gizlemek güvenli değildir. Cache-Control: no-store ve loglarda PII maskeleme uygulanır.
+- Müşteri isterse kabul ettiği ustanın iş için paylaştığı doğrulanmış iletişim numarasını görebilir; iki taraflı paylaşım politikası KVKK aydınlatmasında açıkça belirtilir.
+- Talep iptal edildikten veya eşleşme yönetici kararıyla geri alındıktan sonra yeni iletişim bilgisi sorguları kapatılır. Daha önce görülmüş bir telefon numarasının karşı taraftan fiilen geri alınamayacağı kullanıcıya dürüstçe açıklanır.
+- Kabul ve iletişim bilgisi erişimi için denetim kaydı tutulur; fazla veri saklama yapılmaz. Telefon sahipliği OTP ile doğrulanmadan gerçek iletişim bilgisi açılmaz.
+- `quotes` ve `service_requests` mevcut şeması kabul edilen teklifi temsil etmeye yeterlidir; bu kural için yeni tablo zorunlu değildir. Asıl güvenlik koşulu **sunucu API yetki kontrolüdür**, tarayıcı arayüzü değildir.
+
+## 4. Ücretli abonelikler (henüz onaylanmamış taslak)
 - Mevcut önizleme: Başlangıç **299 TL / ay, 10 hak / ay**; Profesyonel **599 TL / ay, 30 hak / ay**; Kurumsal **999 TL / ay, 70 hak / ay**. Yıllık tutarlar ve ek paketler de taslaktır.
 - 15 tekliflik ücretsiz başlangıçtan sonra 10 haklık ücretli Başlangıç paketi algısal olarak zayıf kalabilir. **Fiyat ve hak sayıları canlı tahsilat açılmadan ayrı kararlaştırılmalıdır**. Şimdilik veritabanındaki tutarları değiştirmeyin.
 - Ücretli aylık haklar her dönem başında bir kez grant edilir. Yıllık aboneliklerde 12 aylık hak tek seferde verilmez; her ay yenilenir. Ek hak satın alma kuralları ayrıca netleştirilir.
 - Ödeme alınmadan `active` üyelik açılmaz. Havale dekontu tek başına ödeme onayı değildir.
 
-## 4. Kötüye kullanım önlemleri
+## 5. Kötüye kullanım önlemleri
 1. Telefon OTP doğrulaması; numara `+90...` şeklinde normalize edilir. SMS kodu kısa süreli ve tek kullanımlıktır, hız limiti ve deneme sınırı vardır.
 2. Veritabanında tek kullanıcı/tek telefon (`users.phone_e164` unique); deneme hakkı için ayrıca yalnız sunucuda tutulan gizli anahtarla üretilmiş **HMAC-SHA-256 telefon parmak izi** benzersiz saklanır. Kod veya HMAC anahtarı GitHub'a konmaz.
 3. Bu tekillik aynı kişinin farklı numara kullanmasını tamamen engellemez. Şüpheli toplu hesaplarda cihaz/IP **risk sinyali** ve manuel inceleme yapılabilir; otomatik ve kalıcı ayrımcılık/yanlış bloklama uygulanmaz.
@@ -35,7 +47,7 @@ Durum: Ücretsiz deneme için **15 teklif hakkı kararlaştırıldı**. Bu dosya
 8. KVKK gereği asgari veri tutulur, amaç/saklama süreleri belirlenir, kullanıcıya açıklanır. Kredi kararları denetlenebilir kayıtlarla verilir; SMS veya konum verisi pazarlama onayına dönüştürülmez.
 9. Hesap silme isteğinde yasal saklama yükümlülükleri değerlendirilir; bir defalık deneme için gerekli minimum kötüye kullanım göstergesi sınırlı süreyle tutulur. Kalıcı saklama politikası ayrı onaylanmalı.
 
-## 5. Durum ve uygulama kabul kontrolleri
+## 6. Durum ve uygulama kabul kontrolleri
 - [ ] `database/migrations/004_trial_membership.sql` Plesk'teki yalnız `ustacebim_db` üzerinde **bir defa** çalıştırıldı.
 - [ ] Usta onayı ve doğrulanmış telefon olmadan deneme başlatılamıyor.
 - [ ] Aynı doğrulanmış numara ve farklı e-posta ile ikinci deneme engelleniyor.
@@ -47,5 +59,5 @@ Durum: Ücretsiz deneme için **15 teklif hakkı kararlaştırıldı**. Bu dosya
 - [ ] Ücretsiz deneme sonunda otomatik ödeme yapılmıyor.
 - [ ] Görünür deneme teklifleri gerçek ödeme/kayıt olmadığını açıkça gösteriyor.
 
-## 6. Sıradaki geliştirme
+## 7. Sıradaki geliştirme
 Node.js + MariaDB API ile `professional_trials` ve `quote_credit_ledger` transaction'ları, usta doğrulaması, teklif politikaları, moderasyon paneli; Netgsm OTP kapalı kalırken yalnız geliştirme ortamında simüle edilen kimlik doğrulama. Canlı kullanıcılara sahte SMS/kod gönderilmiş gibi gösterilmeyecek.
