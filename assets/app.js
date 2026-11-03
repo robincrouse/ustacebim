@@ -152,4 +152,44 @@ if(dashSection==='credits'){root.append(node('h2','','Teklif haklarım'));root.a
 document.querySelectorAll('[data-dash]').forEach(b=>b.onclick=()=>{dashSection=b.dataset.dash;renderDash()});
 document.querySelectorAll('[data-auth]').forEach(b=>b.onclick=()=>{const which=b.dataset.auth;document.querySelectorAll('[data-auth]').forEach(x=>x.classList.toggle('active',x===b));$('#authLogin').classList.toggle('hidden',which!=='login');$('#authRegister').classList.toggle('hidden',which!=='register')});
 $('#phoneSend').addEventListener('click',()=>{$('#phoneStatus').textContent='SMS gönderilmedi. Bu sürümde Netgsm bağlantısı ve gerçek telefon doğrulaması etkin değil.'});
+
+/* Registration stays disabled until PHP + MariaDB migration + SMTP are ready. */
+const emailRegistrationForm=document.getElementById('authRegister');
+async function checkEmailRegistrationReady(){
+ const notice=document.getElementById('authServiceNotice');
+ try{
+  const response=await fetch('./api/status.php',{credentials:'same-origin',cache:'no-store'});
+  if(!response.ok)throw new Error('unavailable');
+  const config=await response.json();
+  const ready=config.registration_enabled===true;
+  emailRegistrationForm.querySelectorAll('input,button').forEach(el=>el.disabled=!ready);
+  notice.textContent=ready
+   ? 'Kayıt için e-posta doğrulaması etkin. Giriş işlemi henüz hazırlanıyor.'
+   : 'E-posta kayıt sistemi kuruluyor. SMTP ayarları tamamlanana kadar kayıt açılamaz.';
+ }catch{
+  emailRegistrationForm.querySelectorAll('input,button').forEach(el=>el.disabled=true);
+  notice.textContent='E-posta kayıt hizmeti henüz kullanılamıyor.';
+ }
+}
+emailRegistrationForm.addEventListener('submit',async event=>{
+ event.preventDefault();
+ const status=document.getElementById('emailRegisterStatus');
+ const submit=document.getElementById('emailRegisterSubmit');
+ const form=new FormData(emailRegistrationForm);
+ const data={action:'register',name:String(form.get('name')||'').trim(),email:String(form.get('email')||'').trim(),password:String(form.get('password')||''),terms:form.has('terms')};
+ if(!data.terms){status.textContent='Lütfen onay kutusunu işaretle.';return}
+ submit.disabled=true;status.textContent='Kayıt isteği gönderiliyor...';
+ try{
+  const result=await fetch('./api/email.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(data)});
+  const response=await result.json();
+  status.textContent=response.message||'İşlem tamamlanamadı.';
+  status.dataset.state=result.ok?'success':'error';
+  if(result.ok){emailRegistrationForm.reset()}
+ }catch{
+  status.textContent='Bağlantı kurulamadı. Lütfen daha sonra tekrar dene.';
+  status.dataset.state='error';
+ }finally{submit.disabled=false}
+});
+checkEmailRegistrationReady();
+
 route();
