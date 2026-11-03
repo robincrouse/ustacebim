@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#132f41"><meta name="description" content="UstaCebim Ankara pilot — hizmet bulma ve teklif platformu arayüz önizlemesi.">
 <title>UstaCebim | Hizmet bul, teklif al</title>
-<link rel="stylesheet" href="./assets/style.css">
-<script src="./assets/app.js" defer></script>
+<link rel="stylesheet" href="./assets/style.css?v=auth-layout-3">
+<script src="./assets/app.js?v=auth-layout-3" defer></script>
 </head>
 <body>
 <div class="topstrip">Ankara pilot sürümü · İşlem ve üyelikler şu anda test aşamasında</div>
@@ -41,39 +41,35 @@
 <section id="ustalar" class="page hidden"><div class="page-intro"><span class="overline">HİZMET VERENLER</span><h1>Usta profilleri</h1><p>Örnek profiller üzerinden filtreleme ve profil görüntüleme tasarımı.</p></div><div class="filters"><select id="proCategory" aria-label="Usta mesleği"><option value="">Tüm meslekler</option></select><select id="proDistrict" aria-label="Usta ilçesi"><option value="">Tüm ilçeler</option></select></div><div class="pros-grid" id="proList"></div></section>
 <section id="usta-detay" class="page hidden"><button class="back-link" data-page="ustalar">← Ustalara dön</button><div id="proDetail"></div></section>
 <section id="giris" class="page hidden">
-<div class="auth-layout auth-layout-simple">
-  <div class="auth-card auth-card-modern">
-    <div class="auth-heading">
-      <div class="auth-brand"><span class="auth-brand-icon" aria-hidden="true">uc</span><span>usta<strong>cebim</strong></span></div>
-      <h1>Hoş geldin!</h1>
-      <p>Hesabına giriş yap veya hemen katıl.</p>
+<div class="auth-layout auth-layout-wide">
+  <div class="auth-card auth-card-horizontal">
+    <div class="auth-heading auth-wide-heading"><div class="auth-brand"><span class="auth-brand-icon" aria-hidden="true">uc</span><span>usta<strong>cebim</strong></span></div><h1>Hoş geldin!</h1><p>Tek hesapla hizmet al, iş fırsatlarını yönet.</p></div>
+    <div class="auth-columns">
+      <div class="auth-main-column">
+        <div class="auth-tabs" role="group" aria-label="Hesap işlemi"><button type="button" data-auth="login" class="active">Giriş Yap</button><button type="button" data-auth="register">Kayıt Ol</button></div>
+        <div id="authLogin">
+          <label>E-posta<input type="email" autocomplete="email" placeholder="E-posta adresiniz" disabled></label>
+          <label>Şifre<input type="password" autocomplete="current-password" placeholder="Şifreniz" disabled></label>
+          <button type="button" class="btn btn-primary full" disabled>Giriş Yap</button>
+        </div>
+        <div id="authRegister" class="hidden">
+          <label>Ad Soyad<input autocomplete="name" placeholder="Adınız Soyadınız" disabled></label>
+          <label>E-posta<input type="email" autocomplete="email" placeholder="E-posta adresiniz" disabled></label>
+          <label>Şifre<input type="password" autocomplete="new-password" placeholder="Şifreniz" disabled></label>
+          <button type="button" class="btn btn-primary full" disabled>Kayıt Ol</button>
+        </div>
+      </div>
+      <div class="auth-method-column">
+        <div class="auth-method-title">Diğer giriş seçenekleri</div>
+        <div class="auth-social-grid">
+          <button type="button" class="social-btn social-google" disabled><span class="google-letter" aria-hidden="true">G</span>Google <small>Yakında</small></button>
+          <button type="button" class="social-btn social-apple" disabled><span class="apple-symbol" aria-hidden="true">●</span>Apple <small>Yakında</small></button>
+        </div>
+        <button type="button" class="auth-phone-btn" data-page="telefon-giris"><span class="phone-symbol" aria-hidden="true">☎</span> Telefon ile devam et <span class="auth-arrow" aria-hidden="true">→</span></button>
+        <p class="auth-method-help">Google, Apple ve SMS doğrulaması gerçek üyelik açıldığında kullanılabilecek.</p>
+      </div>
     </div>
-    <div class="auth-tabs" role="group" aria-label="Hesap işlemi">
-      <button type="button" data-auth="login" class="active">Giriş Yap</button>
-      <button type="button" data-auth="register">Kayıt Ol</button>
-    </div>
-    <div id="authLogin">
-      <label>E-posta<input type="email" autocomplete="email" placeholder="E-posta adresiniz" disabled></label>
-      <label>Şifre<input type="password" autocomplete="current-password" placeholder="Şifreniz" disabled></label>
-      <button type="button" class="btn btn-primary full" disabled>Giriş Yap</button>
-    </div>
-    <div id="authRegister" class="hidden">
-      <label>Ad Soyad<input autocomplete="name" placeholder="Adınız Soyadınız" disabled></label>
-      <label>E-posta<input type="email" autocomplete="email" placeholder="E-posta adresiniz" disabled></label>
-      <label>Şifre<input type="password" autocomplete="new-password" placeholder="Şifreniz" disabled></label>
-      <button type="button" class="btn btn-primary full" disabled>Kayıt Ol</button>
-    </div>
-    <div class="auth-separator">veya devam et</div>
-    <div class="auth-social-grid">
-      <button type="button" class="social-btn social-google" disabled><span class="google-letter" aria-hidden="true">G</span>Google</button>
-      <button type="button" class="social-btn social-apple" disabled><span class="apple-symbol" aria-hidden="true">●</span>Apple</button>
-    </div>
-    <button type="button" class="auth-phone-btn" data-page="telefon-giris">
-      <span class="phone-symbol" aria-hidden="true">☎</span>
-      Telefon numarasıyla devam et
-      <span class="auth-arrow" aria-hidden="true">→</span>
-    </button>
-    <p class="auth-preview-notice">Tasarım önizlemesi · Gerçek giriş işlemleri henüz aktif değil.</p>
+    <p class="auth-preview-notice">Test sürümü · Gerçek üyelik ve şifre doğrulaması henüz aktif değil.</p>
   </div>
 </div>
 </section>
