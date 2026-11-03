@@ -174,3 +174,37 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .auth-layout-simple .auth-tabs{margin:23px 0 20px}
 .auth-layout-simple .social-btn{min-height:48px}
 @media(max-width:660px){.auth-layout.auth-layout-simple{margin:22px auto 48px}.auth-layout-simple .auth-card{padding:23px 20px;border-radius:15px}.auth-layout-simple .auth-card h1{font-size:27px}}
+
+/* 2026-11 auth refresh: centered, compact, app-friendly login */
+.auth-layout.auth-layout-simple{max-width:520px;margin:34px auto 52px}
+.auth-layout-simple .auth-card-modern{border-radius:20px;padding:32px 36px;box-shadow:0 14px 44px #143b4b12}
+.auth-heading{text-align:center;margin-bottom:22px}
+.auth-brand{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:19px;font-family:Manrope,system-ui,sans-serif;font-size:22px;letter-spacing:-.06em;font-weight:700}
+.auth-brand strong{color:var(--teal);font-weight:900}
+.auth-brand-icon{width:39px;height:39px;border-radius:11px;background:#143447;color:#b8f2db;display:grid;place-items:center;font-size:17px;font-weight:900;letter-spacing:-.09em}
+.auth-heading h1{font-size:29px;margin:0 0 6px}
+.auth-heading p{font-size:13px;color:var(--muted);margin:0}
+.auth-card-modern .auth-tabs{margin:0 0 19px}
+.auth-card-modern label{margin-bottom:13px;font-size:12px}
+.auth-card-modern label input{margin-top:6px;min-height:45px;background:#fff}
+.auth-card-modern #authLogin>.btn,.auth-card-modern #authRegister>.btn{margin-top:7px;min-height:47px}
+.auth-card-modern .auth-separator{margin:20px 0 16px}
+.auth-card-modern .auth-separator:before,.auth-card-modern .auth-separator:after{width:35%}
+.auth-social-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.auth-social-grid .social-btn{justify-content:center;gap:11px;min-height:48px;font-size:14px}
+.auth-social-grid .google-letter{font-weight:900;font-size:22px;font-family:Arial,sans-serif}
+.auth-social-grid .apple-symbol{font-size:23px;line-height:1;color:#111827}
+.auth-phone-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:12px;padding:14px 12px;border-radius:11px;background:#eef7f5;border:1px solid #c8e2dc;color:#0d5c56;font-weight:800;font-size:13px;min-height:49px}
+.auth-phone-btn:hover{background:#e0f1ec;border-color:#83c1b7}
+.auth-phone-btn .phone-symbol{font-size:18px;line-height:1}
+.auth-phone-btn .auth-arrow{font-size:17px}
+.auth-preview-notice{text-align:center;font-size:11px!important;color:#7a8a93!important;line-height:1.5;margin:17px 0 0!important}
+@media(max-width:660px){
+ .auth-layout.auth-layout-simple{margin:18px auto 34px}
+ .auth-layout-simple .auth-card-modern{padding:25px 19px;border-radius:15px}
+ .auth-heading{margin-bottom:19px}
+ .auth-heading h1{font-size:27px}
+ .auth-brand{margin-bottom:15px}
+ .auth-social-grid{gap:8px}
+ .auth-social-grid .social-btn{min-height:47px}
+}
