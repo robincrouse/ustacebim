@@ -33,6 +33,7 @@ const mockPros=[
 {id:6,name:'Örnek Montaj Ustası',profession:'Mobilya Montajı',district:'Mamak',exp:8,bio:'Mobilya montajı ve küçük ev tamiratlarına yönelik tanıtım profili.',initial:'M'}
 ];
 const plans=[{name:'Başlangıç',monthly:299,yearly:2870,credits:10,cats:1,areas:1},{name:'Profesyonel',monthly:599,yearly:5750,credits:30,cats:3,areas:5},{name:'Kurumsal',monthly:999,yearly:9590,credits:70,cats:10,areas:'Sınırsız'}];
+const trialPlan={name:'30 Gün Ücretsiz',credits:15,cats:2,areas:3,days:30};
 const extras=[[5,199],[15,499],[30,899]];
 const storageKey='ustacebim-ui-preview-v2';
 const $=sel=>document.querySelector(sel);
@@ -65,7 +66,30 @@ function allPros(){let result=[...mockPros];if(saved.profile)result.unshift({...
 function renderPros(){const root=$('#proList');root.replaceChildren();const cat=$('#proCategory').value,dist=$('#proDistrict').value;const list=allPros().filter(p=>(!cat||p.profession===cat)&&(!dist||p.district===dist));list.forEach(p=>root.append(proCard(p)));if(!list.length)root.append(node('div','empty-state','Bu filtrelerde usta profili bulunamadı.'))}
 function showPro(pro){const root=$('#proDetail');root.replaceChildren();const banner=node('div','profile-banner'),avatar=node('div','pro-avatar',pro.initial),text=node('div');add(text,node('span','overline',pro.example!==false?'TEMSİLİ PROFİL':'YEREL ÖNİZLEME'),node('h1','',pro.name),node('p','',pro.profession+' · '+pro.district+' / Ankara'));add(banner,avatar,text);const body=node('div','profile-body'),about=node('article'),aside=node('article');add(about,node('h2','','Hakkında'),node('p','',pro.bio));add(aside,node('h3','','Hizmet bilgileri'),node('p','','Uzmanlık: '+pro.profession),node('p','','Hizmet bölgesi: '+pro.district),node('p','','Deneyim: '+pro.exp+' yıl'),button('Teklif iste (yakında)','btn btn-primary',()=>alert('Gerçek usta iletişimi henüz aktif değil.')));add(body,about,aside);add(root,banner,body);location.hash='usta-detay';if(location.hash==='#usta-detay')go('usta-detay')}
 $('#proForm').addEventListener('submit',e=>{e.preventDefault();const name=$('#proName').value.trim(),bio=$('#proBio').value.trim();if(name.length<3||bio.length<20){$('#proStatus').textContent='Lütfen profil açıklamasını biraz daha ayrıntılı yaz.';return}saved.profile={name,profession:$('#proProfession').value,district:$('#proArea').value,exp:Number($('#proExperience').value)||0,bio};persist();$('#proStatus').textContent='Profilin yerel önizlemesi kaydedildi. Henüz yayımlanmadı.';showPro({...saved.profile,initial:name[0].toLocaleUpperCase('tr'),example:false})});
-function renderPlans(){const root=$('#pricingList');root.replaceChildren();const yearly=$('#billingYear').checked;plans.forEach((p,i)=>{const card=node('article','price-card'+(i===1?' featured':''));if(i===1)card.append(node('span','featured-badge','EN ÇOK TERCİH EDİLEN'));add(card,node('h3','',p.name),node('p','','Hizmet verenler için örnek üyelik'));const price=node('div','price',formatTL(yearly?p.yearly:p.monthly));price.append(node('small','',yearly?' / yıl':' / ay'));card.append(price);const ul=node('ul');[p.credits+' teklif hakkı / ay',p.cats+' meslek kategorisi',p.areas+' hizmet bölgesi','Profil ve portföy alanı'].forEach(s=>ul.append(node('li','',s)));card.append(ul);card.append(button('Yakında Aktif','btn btn-primary',()=>alert('Ücretli paket seçimi henüz aktif değil.')));root.append(card)});const extra=$('#extraList');extra.replaceChildren();extras.forEach(p=>{const c=node('article','extra-card'),left=node('div');add(left,node('h3','',p[0]+' ek teklif hakkı'),node('p','','Örnek ek paket'));add(c,left,node('strong','',formatTL(p[1])));extra.append(c)})}
+function renderPlans(){
+ const root=$('#pricingList');root.replaceChildren();
+ const yearly=$('#billingYear').checked;
+ const trial=node('article','price-card trial-card');
+ add(trial,node('span','tag','İLK KAYITTA BİR KEZ'),node('h3','',trialPlan.name),node('p','','Profil onayından sonra başlar; otomatik ücretlendirme yok.'));
+ const trialPrice=node('div','price','0 TL');trialPrice.append(node('small','',' / 30 gün'));trial.append(trialPrice);
+ const trialItems=node('ul');
+ [trialPlan.credits+' teklif hakkı / deneme boyunca',trialPlan.cats+' meslek kategorisi',trialPlan.areas+' hizmet ilçesi','Kredi kartı gerekmez','Kalan haklar 30 gün sonunda sona erer'].forEach(s=>trialItems.append(node('li','',s)));
+ trial.append(trialItems,button('Ücretsiz Usta Profili Oluştur →','btn btn-primary',()=>location.hash='usta-kayit'));
+ root.append(trial);
+ plans.forEach((p,i)=>{
+  const card=node('article','price-card'+(i===1?' featured':''));
+  if(i===1)card.append(node('span','featured-badge','ÖRNEK PAKET'));
+  add(card,node('h3','',p.name),node('p','','Deneme sonrasında tercih edilebilir — fiyatlar henüz kesin değil.'));
+  const price=node('div','price',formatTL(yearly?p.yearly:p.monthly));
+  price.append(node('small','',yearly?' / yıl':' / ay'));card.append(price);
+  const ul=node('ul');
+  [p.credits+' teklif hakkı / ay',p.cats+' meslek kategorisi',p.areas+' hizmet bölgesi','Profil ve portföy alanı'].forEach(s=>ul.append(node('li','',s)));
+  card.append(ul,button('Henüz Satışta Değil','btn btn-primary',()=>alert('Ücretli üyelik ve ödeme sistemi henüz aktif değil.')));
+  root.append(card);
+ });
+ const extra=$('#extraList');extra.replaceChildren();
+ extras.forEach(p=>{const c=node('article','extra-card'),left=node('div');add(left,node('h3','',p[0]+' ek teklif hakkı'),node('p','','Örnek ek paket — satışı kapalı'));add(c,left,node('strong','',formatTL(p[1])));extra.append(c)});
+}
 $('#billingYear').onchange=renderPlans;renderPlans();
 let dashSection='overview';function renderDash(){const root=$('#dashboardContent');root.replaceChildren();document.querySelectorAll('[data-dash]').forEach(b=>b.classList.toggle('active',b.dataset.dash===dashSection));if(dashSection==='overview'){add(root,node('h2','','Genel bakış'),node('p','', 'Demo sürümündeki yerel taslakların.'));const stats=node('div','stats-grid');[['Talep taslağı',saved.requests.length],['Usta profili',saved.profile?'1':'0'],['Gerçek teklif hakkı','—']].forEach(x=>{const s=node('div','stat');add(s,node('strong','',x[1]),node('small','',x[0]));stats.append(s)});root.append(stats);root.append(node('p','info-note','Bu bilgiler yalnızca bu tarayıcıda saklanır. Gerçek kullanıcı hesabı ve teklifler henüz bağlı değildir.'))}
 if(dashSection==='requests'){root.append(node('h2','','Taleplerim'));if(!saved.requests.length)root.append(node('p','', 'Henüz yerel talep taslağın bulunmuyor.'));saved.requests.forEach(r=>root.append(requestCard(r)));root.append(button('Yeni talep oluştur →','btn btn-primary',()=>location.hash='talep-olustur'))}
