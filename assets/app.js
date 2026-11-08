@@ -81,6 +81,53 @@ function syncProviderType(){
 document.querySelectorAll('input[name="providerType"]').forEach(r=>r.addEventListener('change',syncProviderType));
 syncProviderType();
 
+const wizardSteps=Array.from(document.querySelectorAll('[data-pro-step]'));
+let wizardStep=0;
+function wizardSummary(){
+ const type=document.querySelector('input[name="providerType"]:checked')?.value||'individual';
+ const labels={individual:'Bireysel usta',sole_proprietor:'Şahıs işletmesi',company:'Şirket / firma'};
+ const summary=$('#proWizardSummary');summary.replaceChildren();
+ const rows=[['Hesap türü',labels[type]],['Profil',($('#proName').value.trim()||'Henüz girilmedi')],['Uzmanlıklar',getChoices('profession').join(', ')||'Henüz seçilmedi'],['Hizmet ilçeleri',getChoices('area').join(', ')||'Henüz seçilmedi']];
+ rows.forEach(([label,value])=>{const row=node('div','wizard-summary-row');add(row,node('span','',label),node('strong','',value));summary.append(row)});
+ $('#businessWizardBlock').classList.toggle('hidden',type==='individual');
+}
+function updateWizard(){
+ wizardSteps.forEach((panel,i)=>{const active=i===wizardStep;panel.classList.toggle('hidden',!active);panel.setAttribute('aria-hidden',String(!active))});
+ const names=['Hesap türü','Profil bilgileri','Hizmet alanların','Son kontrol'];
+ $('#proWizardTitle').textContent=names[wizardStep];
+ $('#proWizardCounter').textContent=(wizardStep+1)+' / 4';
+ $('#proWizardProgress').style.width=((wizardStep+1)*25)+'%';
+ $('#proWizardBack').classList.toggle('hidden',wizardStep===0);
+ $('#proWizardNext').classList.toggle('hidden',wizardStep===3);
+ $('#proWizardSubmit').classList.toggle('hidden',wizardStep!==3);
+ $('#proStatus').textContent='';
+ if(wizardStep===3)wizardSummary();
+}
+function validateWizardStep(step){
+ const status=$('#proStatus');
+ if(step===1){
+  const name=$('#proName').value.trim(),bio=$('#proBio').value.trim();
+  if(name.length<3){status.textContent='Lütfen görünen adını en az 3 karakter yaz.';$('#proName').focus();return false}
+  if(bio.length<20){status.textContent='Kısaca kendini ve yaptığın işleri anlat (en az 20 karakter).';$('#proBio').focus();return false}
+  const website=$('#proWebsite').value.trim();
+  if(website&&(!/^https?:\\/\\//i.test(website)||!$('#proWebsite').checkValidity())){status.textContent='İnternet sitesi adresini kontrol et.';$('#proWebsite').focus();return false}
+  const exp=$('#proExperience'),year=$('#proEstablished');
+  if((exp.value&&!exp.checkValidity())||(year.value&&!year.checkValidity())){status.textContent='Deneyim veya kuruluş yılını kontrol et.';return false}
+ }
+ if(step===2){
+  if(!getChoices('profession').length){status.textContent='En az bir uzmanlık seçmelisin.';return false}
+  if(!getChoices('area').length){status.textContent='En az bir hizmet ilçesi seçmelisin.';return false}
+ }
+ if(step===3){
+  const type=document.querySelector('input[name="providerType"]:checked')?.value;
+  if(type!=='individual'&&$('#proLegalName').value.trim().length<3){status.textContent='İşletmenin resmî unvanını yaz.';$('#proLegalName').focus();return false}
+ }
+ return true;
+}
+$('#proWizardBack').addEventListener('click',()=>{wizardStep=Math.max(0,wizardStep-1);updateWizard()});
+$('#proWizardNext').addEventListener('click',()=>{if(!validateWizardStep(wizardStep))return;wizardStep=Math.min(3,wizardStep+1);updateWizard()});
+updateWizard();
+
 const proMedia={avatar:null,cover:null,gallery:[]};
 const mediaUrls=new Set();
 function releaseUrl(url){if(url){URL.revokeObjectURL(url);mediaUrls.delete(url)}}
@@ -188,6 +235,10 @@ if(pro.example===false&&proMedia.gallery.length){
 location.hash='usta-detay';if(location.hash==='#usta-detay')go('usta-detay')}
 $('#proForm').addEventListener('submit',e=>{
  e.preventDefault();
+ for(const step of [1,2,3]){
+  if(!validateWizardStep(step)){wizardStep=step;updateWizard();validateWizardStep(step);return}
+ }
+
  const name=$('#proName').value.trim(),bio=$('#proBio').value.trim();
  if(name.length<3||bio.length<20){$('#proStatus').textContent='Lütfen adını ve profil açıklamanı kontrol et.';return}
  const professions=getChoices('profession'),areas=getChoices('area');
