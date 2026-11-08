@@ -5,8 +5,15 @@ header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 $ready = false;
 try {
-    $file = dirname(__DIR__,3) . '/private/ustacebim-config.php';
-    if (is_file($file)) {
+    $files = [
+        dirname(__DIR__, 2) . '/private/ustacebim-config.php',
+        dirname(__DIR__, 3) . '/private/ustacebim-config.php',
+    ];
+    $file = null;
+    foreach ($files as $candidate) {
+        if (is_file($candidate)) { $file = $candidate; break; }
+    }
+    if ($file !== null) {
         $cfg = require $file;
         $required = ['app_url','db_host','db_name','db_user','db_password','smtp_host','smtp_port','smtp_user','smtp_password','mail_from','mailer_autoload','rate_limit_secret'];
         if (is_array($cfg) && count(array_filter($required, static function ($key) use ($cfg) {
@@ -21,6 +28,6 @@ try {
         }
     }
 } catch (Throwable $exception) {
-    error_log('UstaCebim registration status error: '.get_class($exception));
+    error_log('Hizmet Her Yerde registration status error: '.get_class($exception));
 }
 echo json_encode(['registration_enabled'=>$ready], JSON_UNESCAPED_UNICODE);
