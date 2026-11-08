@@ -363,7 +363,7 @@ function editProfessionalProfile(){
 function buildDashMenu(isProfessional){
  const menu=$('#dashboardMenu');menu.replaceChildren();
  const items=isProfessional?
-  [['overview','▦ Genel Bakış'],['opportunities','▤ İş Fırsatları'],['quotes','◈ Tekliflerim'],['messages','✉ Görüşmeler'],['jobs','✓ İş Geçmişim'],['profile','♙ Usta Profilim'],['credits','◇ Teklif Haklarım']]:
+  [['overview','▦ Genel Bakış'],['opportunities','▤ İş Fırsatları'],['quotes','◈ Tekliflerim'],['messages','✉ Görüşmeler'],['jobs','✓ İşlerim'],['profile','♙ Usta Profilim'],['credits','◇ Teklif Haklarım']]:
   [['overview','▦ Genel Bakış'],['requests','▤ Taleplerim'],['profile','♙ Hesap Bilgilerim']];
  if(!items.some(x=>x[0]===dashSection))dashSection='overview';
  items.forEach(([id,label])=>{
