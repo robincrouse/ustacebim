@@ -321,3 +321,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  .media-preview{width:75px;height:66px}
  .media-avatar-preview{width:66px;height:66px}
 }
+
+/* Selected media also appears in profile preview until page reload */
+.profile-image-avatar{overflow:hidden;padding:0}
+.profile-image-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.profile-gallery-section{border:1px solid #dfe9e9;background:#fff;border-radius:15px;margin-top:18px;padding:22px}
+.profile-gallery-section h2{font-size:19px;margin:0 0 13px}
+.profile-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.profile-gallery-grid img{width:100%;height:170px;object-fit:cover;border-radius:10px}
+@media(max-width:660px){.profile-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.profile-gallery-grid img{height:125px}}
