@@ -105,12 +105,12 @@ function updateWizard(){
 }
 function getProWebsite(){
  const name=$('#proWebsiteName').value.trim().toLowerCase();
- const ext=$('#proWebsiteTld').value.trim().toLowerCase().replace(/^\\.+/,'');
+ const ext=$('#proWebsiteTld').value.trim().toLowerCase().replace(/^\.+/,'');
  return {name,ext,url:name&&ext?'https://www.'+name+'.'+ext:''};
 }
 function setProWebsite(url){
  let hostname='';
- try{hostname=new URL(url).hostname.replace(/^www\\./,'')}catch{}
+ try{hostname=new URL(url).hostname.replace(/^www\./,'')}catch{}
  if(!hostname)return;
  const parts=hostname.split('.');
  $('#proWebsiteName').value=parts.shift()||'';
@@ -124,7 +124,7 @@ function validateWizardStep(step){
   if(bio.length<20){status.textContent='Kısaca kendini ve yaptığın işleri anlat (en az 20 karakter).';$('#proBio').focus();return false}
   const {name:domainName,ext}=getProWebsite();
   const validName=/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(domainName);
-  const validExt=/^[a-z]{2,}(?:\\.[a-z]{2,})*$/.test(ext);
+  const validExt=/^[a-z]{2,}(?:\.[a-z]{2,})*$/.test(ext);
   if((domainName||ext)&&(!validName||!validExt)){status.textContent='Site adı ve uzantıyı kontrol et. Örnek: siteadi + com.tr';$('#proWebsiteName').focus();return false}
   const exp=$('#proExperience'),year=$('#proEstablished');
   if((exp.value&&!exp.checkValidity())||(year.value&&!year.checkValidity())){status.textContent='Deneyim veya kuruluş yılını kontrol et.';return false}
