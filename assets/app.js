@@ -239,7 +239,24 @@ function allPros(){let result=[...mockPros];if(saved.profile)result.unshift({...
 function renderPros(){const root=$('#proList');root.replaceChildren();const cat=$('#proCategory').value,dist=$('#proDistrict').value;const list=allPros().filter(p=>(!cat||(p.professions||[p.profession]).includes(cat))&&(!dist||(p.areas||[p.district]).includes(dist)));list.forEach(p=>root.append(proCard(p)));if(!list.length)root.append(node('div','empty-state','Bu filtrelerde usta profili bulunamadı.'))}
 function showPro(pro){const root=$('#proDetail');root.replaceChildren();const banner=node('div','profile-banner'),avatar=node('div','pro-avatar',pro.initial),text=node('div');add(text,node('span','overline',pro.example!==false?'TEMSİLİ PROFİL':'YEREL ÖNİZLEME'),node('h1','',pro.name),node('p','',(pro.professions||[pro.profession]).join(' · ')+' · '+(pro.areas||[pro.district]).join(', ')+' / Ankara'));if(pro.example===false&&proMedia.avatar){const img=document.createElement('img');img.src=proMedia.avatar.url;img.alt='Profil görseli önizlemesi';avatar.replaceChildren(img);avatar.classList.add('profile-image-avatar')}
 if(pro.example===false&&proMedia.cover){banner.style.backgroundImage='linear-gradient(90deg,rgba(16,45,58,.87),rgba(16,45,58,.56)),url("'+proMedia.cover.url+'")';banner.style.backgroundSize='cover';banner.style.backgroundPosition='center'}
-add(banner,avatar,text);const body=node('div','profile-body'),about=node('article'),aside=node('article');add(about,node('h2','','Hakkında'),node('p','',pro.bio));add(aside,node('h3','','Hizmet bilgileri'),node('p','','Uzmanlık: '+(pro.professions||[pro.profession]).join(', ')),node('p','','Hizmet bölgesi: '+(pro.areas||[pro.district]).join(', ')),node('p','','Deneyim: '+pro.exp+' yıl'),node('p','','Hizmet veren türü: '+({individual:'Bireysel usta',sole_proprietor:'Şahıs işletmesi',company:'Şirket'}[pro.providerType]||'Belirtilmedi')),button('Teklif iste (yakında)','btn btn-primary',()=>alert('Gerçek usta iletişimi henüz aktif değil.')));add(body,about,aside);add(root,banner,body);
+add(banner,avatar,text);const body=node('div','profile-body'),about=node('article'),aside=node('article');add(about,node('h2','','Hakkında'),node('p','',pro.bio));add(aside,node('h3','','Hizmet bilgileri'));
+const details=[
+ ['Uzmanlık',(pro.professions||[pro.profession]).join(', ')],
+ ['Hizmet bölgesi',(pro.areas||[pro.district]).join(', ')],
+ ['Deneyim',pro.exp+' yıl'],
+ ['Hizmet veren türü',({individual:'Bireysel usta',sole_proprietor:'Şahıs işletmesi',company:'Şirket / firma'}[pro.providerType]||'Belirtilmedi'))
+];
+const detailsBox=node('dl','profile-info-list');
+details.forEach(([key,value])=>{const row=node('div','profile-info-row');add(row,node('dt','',key),node('dd','',value));detailsBox.append(row)});
+aside.append(detailsBox);
+if(pro.website){
+ try{const url=new URL(pro.website);if(url.protocol==='https:'||url.protocol==='http:'){
+  const websiteLine=node('p','profile-website');websiteLine.append(node('span','','Web sitesi: '));
+  const link=document.createElement('a');link.href=url.toString();link.target='_blank';link.rel='noopener noreferrer';link.textContent=url.hostname;websiteLine.append(link);aside.append(websiteLine);
+ }}catch{}
+}
+const demoNotice=node('div','profile-demo-note','Bu bir profil önizlemesidir. Teklif ve iletişim özellikleri henüz aktif değil.');
+aside.append(demoNotice);add(body,about,aside);add(root,banner,body);
 if(pro.example===false&&proMedia.gallery.length){
  const gallerySection=node('section','profile-gallery-section');
  gallerySection.append(node('h2','','İş örnekleri · Yerel önizleme'));
