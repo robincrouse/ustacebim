@@ -259,7 +259,7 @@ const details=[
  ['Uzmanlık',(pro.professions||[pro.profession]).join(', ')],
  ['Hizmet bölgesi',(pro.areas||[pro.district]).join(', ')],
  ['Deneyim',pro.exp+' yıl'],
- ['Hizmet veren türü',({individual:'Bireysel usta',sole_proprietor:'Şahıs işletmesi',company:'Şirket / firma'}[pro.providerType]||'Belirtilmedi'))
+ ['Hizmet veren türü',({individual:'Bireysel usta',sole_proprietor:'Şahıs işletmesi',company:'Şirket / firma'}[pro.providerType]||'Belirtilmedi')]
 ];
 const detailsBox=node('dl','profile-info-list');
 details.forEach(([key,value])=>{const row=node('div','profile-info-row');add(row,node('dt','',key),node('dd','',value));detailsBox.append(row)});
