@@ -380,3 +380,21 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  .wizard-summary-row strong{text-align:left}
  .wizard-optional-body{padding:3px 10px 12px}
 }
+
+/* Easy website entry with fixed prefix and dot-separated extension */
+.website-field{min-width:0}
+.website-field>label{display:block;margin-bottom:7px}
+.website-input-group{display:flex;align-items:stretch;min-width:0;border:1px solid #ccdce0;background:#fff;border-radius:9px;overflow:hidden;min-height:42px}
+.website-input-group:focus-within{border-color:#138a7c;box-shadow:0 0 0 3px rgba(19,138,124,.1)}
+.website-fixed,.website-dot{display:flex;align-items:center;flex:0 0 auto;background:#f2f7f7;color:#4b707b;font-size:12px;font-weight:700;white-space:nowrap;padding:0 10px}
+.website-dot{padding:0 5px;border-left:1px solid #e2ebed}
+.website-input-group input{border:0!important;border-radius:0!important;box-shadow:none!important;outline:0!important;min-width:0;padding:8px!important;font-size:13px}
+.website-input-group #proWebsiteName{flex:1 1 70px;width:40%}
+.website-input-group #proWebsiteTld{flex:0 1 78px;width:28%;min-width:55px}
+.website-example{display:block;margin-top:6px;font-size:11px;color:#758b96}
+@media(max-width:520px){
+ .website-fixed{font-size:11px;padding:0 6px}
+ .website-dot{padding:0 3px}
+ .website-input-group input{font-size:12px!important;padding:7px 5px!important}
+ .website-input-group #proWebsiteTld{flex-basis:65px}
+}
