@@ -70,6 +70,17 @@ function setChoices(name,values){const selected=new Set(values||[]);document.que
 function showToast(message){let el=$('#uiToast');if(!el){el=node('div','ui-toast');el.id='uiToast';el.setAttribute('role','status');document.body.append(el)}el.textContent=message;el.classList.add('show');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove('show'),3500)}
 buildChoices('#proProfessionChoices',categories.map(x=>x[0]),2,'profession');
 buildChoices('#proAreaChoices',districts,3,'area');
+fillSelect('#proBusinessDistrict',districts);
+function syncProviderType(){
+ const type=document.querySelector('input[name="providerType"]:checked')?.value||'individual';
+ const show=type!=='individual';
+ $('#businessFields').classList.toggle('hidden',!show);
+ document.querySelectorAll('.provider-type-option').forEach(l=>l.classList.toggle('selected',l.querySelector('input').checked));
+ $('#proLegalName').required=show;
+}
+document.querySelectorAll('input[name="providerType"]').forEach(r=>r.addEventListener('change',syncProviderType));
+syncProviderType();
+
 
 const pages=new Set([...document.querySelectorAll('.page')].map(x=>x.id));
 function go(page){const name=pages.has(page)?page:'not-found';document.querySelectorAll('.page').forEach(p=>p.classList.toggle('hidden',p.id!==name));document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+name));document.querySelectorAll('[data-mobile-nav]').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+name));$('#navlinks').classList.remove('open');$('#menuToggle').setAttribute('aria-expanded','false');if(name==='talepler')renderRequests();if(name==='ustalar')renderPros();if(name==='paketler')renderPlans();if(name==='panel')renderDash();window.scrollTo({top:0,behavior:'instant'});document.title=(name==='anasayfa'?'Hizmet bul, teklif al':({'hizmetler':'Hizmetler','talepler':'İş Talepleri','talep-olustur':'Talep Oluştur','ustalar':'Ustalar','giris':'Giriş Yap','telefon-giris':'Telefonla Giriş','usta-kayit':'Usta Ol','paketler':'Üyelik Paketleri','panel':'Panelim','usta-detay':'Usta Profili'}[name]||'UstaCebim'))+' | UstaCebim'}
@@ -116,10 +127,29 @@ $('#requestForm').addEventListener('submit',e=>{e.preventDefault();const categor
 function proCard(pro){const card=node('article','pro-card');const head=node('div','pro-head');const av=node('div','pro-avatar',pro.initial);const details=node('div');add(details,node('h3','',pro.name),node('p','',pro.profession));add(head,av,details);add(card,head,node('p','',pro.bio));const meta=node('div','pro-meta');add(meta,node('span','', '📍 '+pro.district),node('span','', '◷ '+pro.exp+' yıl deneyim'));card.appendChild(meta);card.append(button('Profili İncele →','btn btn-primary',()=>showPro(pro)));const tag=sampleTag();card.prepend(tag);return card}
 function allPros(){let result=[...mockPros];if(saved.profile)result.unshift({...saved.profile,id:0,initial:(saved.profile.name||'U').slice(0,1).toLocaleUpperCase('tr'),example:false});return result}
 function renderPros(){const root=$('#proList');root.replaceChildren();const cat=$('#proCategory').value,dist=$('#proDistrict').value;const list=allPros().filter(p=>(!cat||(p.professions||[p.profession]).includes(cat))&&(!dist||(p.areas||[p.district]).includes(dist)));list.forEach(p=>root.append(proCard(p)));if(!list.length)root.append(node('div','empty-state','Bu filtrelerde usta profili bulunamadı.'))}
-function showPro(pro){const root=$('#proDetail');root.replaceChildren();const banner=node('div','profile-banner'),avatar=node('div','pro-avatar',pro.initial),text=node('div');add(text,node('span','overline',pro.example!==false?'TEMSİLİ PROFİL':'YEREL ÖNİZLEME'),node('h1','',pro.name),node('p','',(pro.professions||[pro.profession]).join(' · ')+' · '+(pro.areas||[pro.district]).join(', ')+' / Ankara'));add(banner,avatar,text);const body=node('div','profile-body'),about=node('article'),aside=node('article');add(about,node('h2','','Hakkında'),node('p','',pro.bio));add(aside,node('h3','','Hizmet bilgileri'),node('p','','Uzmanlık: '+(pro.professions||[pro.profession]).join(', ')),node('p','','Hizmet bölgesi: '+(pro.areas||[pro.district]).join(', ')),node('p','','Deneyim: '+pro.exp+' yıl'),button('Teklif iste (yakında)','btn btn-primary',()=>alert('Gerçek usta iletişimi henüz aktif değil.')));add(body,about,aside);add(root,banner,body);location.hash='usta-detay';if(location.hash==='#usta-detay')go('usta-detay')}
-$('#proForm').addEventListener('submit',e=>{e.preventDefault();const name=$('#proName').value.trim(),bio=$('#proBio').value.trim();if(name.length<3||bio.length<20){$('#proStatus').textContent='Lütfen profil açıklamasını biraz daha ayrıntılı yaz.';return}const professions=getChoices('profession'),areas=getChoices('area');
-if(!professions.length||!areas.length){$('#proStatus').textContent='En az bir meslek ve bir hizmet ilçesi seçmelisin.';return}
-saved.profile={name,profession:professions[0],district:areas[0],professions,areas,exp:Number($('#proExperience').value)||0,bio};persist();$('#proStatus').textContent='Profilin yerel önizlemesi kaydedildi. Henüz yayımlanmadı.';showPro({...saved.profile,initial:name[0].toLocaleUpperCase('tr'),example:false})});
+function showPro(pro){const root=$('#proDetail');root.replaceChildren();const banner=node('div','profile-banner'),avatar=node('div','pro-avatar',pro.initial),text=node('div');add(text,node('span','overline',pro.example!==false?'TEMSİLİ PROFİL':'YEREL ÖNİZLEME'),node('h1','',pro.name),node('p','',(pro.professions||[pro.profession]).join(' · ')+' · '+(pro.areas||[pro.district]).join(', ')+' / Ankara'));add(banner,avatar,text);const body=node('div','profile-body'),about=node('article'),aside=node('article');add(about,node('h2','','Hakkında'),node('p','',pro.bio));add(aside,node('h3','','Hizmet bilgileri'),node('p','','Uzmanlık: '+(pro.professions||[pro.profession]).join(', ')),node('p','','Hizmet bölgesi: '+(pro.areas||[pro.district]).join(', ')),node('p','','Deneyim: '+pro.exp+' yıl'),node('p','','Hizmet veren türü: '+({individual:'Bireysel usta',sole_proprietor:'Şahıs işletmesi',company:'Şirket'}[pro.providerType]||'Belirtilmedi')),button('Teklif iste (yakında)','btn btn-primary',()=>alert('Gerçek usta iletişimi henüz aktif değil.')));add(body,about,aside);add(root,banner,body);location.hash='usta-detay';if(location.hash==='#usta-detay')go('usta-detay')}
+$('#proForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const name=$('#proName').value.trim(),bio=$('#proBio').value.trim();
+ if(name.length<3||bio.length<20){$('#proStatus').textContent='Lütfen adını ve profil açıklamanı kontrol et.';return}
+ const professions=getChoices('profession'),areas=getChoices('area');
+ if(!professions.length||!areas.length){$('#proStatus').textContent='En az bir meslek ve bir hizmet ilçesi seçmelisin.';return}
+ const providerType=document.querySelector('input[name="providerType"]:checked')?.value||'individual';
+ const legalName=$('#proLegalName').value.trim();
+ if(providerType!=='individual'&&legalName.length<3){$('#proStatus').textContent='İşletmenin resmî unvanını yaz.';return}
+ const website=$('#proWebsite').value.trim();
+ if(website && !/^https?:\/\//i.test(website)){$('#proStatus').textContent='İnternet sitesi http:// veya https:// ile başlamalı.';return}
+ // Demo data intentionally excludes tax IDs, personal documents and private phone numbers.
+ saved.profile={name,providerType,legalName:providerType==='individual'?'':legalName,
+   profession:professions[0],district:areas[0],professions,areas,
+   exp:Number($('#proExperience').value)||0,bio,website,
+   established:Number($('#proEstablished').value)||null,
+   businessCity:providerType==='individual'?'':$('#proBusinessCity').value.trim(),
+   businessDistrict:providerType==='individual'?'':$('#proBusinessDistrict').value};
+ persist();
+ $('#proStatus').textContent='Profil taslağın bu tarayıcıya kaydedildi; gerçek sisteme gönderilmedi.';
+ showPro({...saved.profile,initial:name[0].toLocaleUpperCase('tr'),example:false});
+});
 function renderPlans(){
  const root=$('#pricingList');root.replaceChildren();
  const yearly=$('#billingYear').checked;
@@ -147,7 +177,16 @@ function renderPlans(){
 $('#billingYear').onchange=renderPlans;renderPlans();
 let dashSection='overview';function renderDash(){const root=$('#dashboardContent');root.replaceChildren();document.querySelectorAll('[data-dash]').forEach(b=>b.classList.toggle('active',b.dataset.dash===dashSection));if(dashSection==='overview'){add(root,node('h2','','Genel bakış'),node('p','', 'Demo sürümündeki yerel taslakların.'));const stats=node('div','stats-grid');[['Talep taslağı',saved.requests.length],['Usta profili',saved.profile?'1':'0'],['Gerçek teklif hakkı','—']].forEach(x=>{const s=node('div','stat');add(s,node('strong','',x[1]),node('small','',x[0]));stats.append(s)});root.append(stats);root.append(node('p','info-note','Bu bilgiler yalnızca bu tarayıcıda saklanır. Gerçek kullanıcı hesabı ve teklifler henüz bağlı değildir.'))}
 if(dashSection==='requests'){root.append(node('h2','','Taleplerim'));if(!saved.requests.length)root.append(node('p','', 'Henüz yerel talep taslağın bulunmuyor.'));saved.requests.forEach(r=>root.append(requestCard(r)));root.append(button('Yeni talep oluştur →','btn btn-primary',()=>location.hash='talep-olustur'))}
-if(dashSection==='profile'){root.append(node('h2','','Usta profilim'));if(!saved.profile)root.append(node('p','', 'Henüz örnek usta profilin yok.'));else{root.append(node('h3','',saved.profile.name));root.append(node('p','',saved.profile.profession+' · '+saved.profile.district));root.append(node('p','',saved.profile.bio))}root.append(button('Profili düzenle →','btn btn-primary',()=>{if(saved.profile){$('#proName').value=saved.profile.name;setChoices('profession',saved.profile.professions||[saved.profile.profession]);setChoices('area',saved.profile.areas||[saved.profile.district]);$('#proExperience').value=saved.profile.exp;$('#proBio').value=saved.profile.bio}location.hash='usta-kayit'}))}
+if(dashSection==='profile'){root.append(node('h2','','Usta profilim'));if(!saved.profile)root.append(node('p','', 'Henüz örnek usta profilin yok.'));else{root.append(node('h3','',saved.profile.name));root.append(node('p','',saved.profile.profession+' · '+saved.profile.district));root.append(node('p','',saved.profile.bio))}root.append(button('Profili düzenle →','btn btn-primary',()=>{if(saved.profile){
+ const type=saved.profile.providerType||'individual';
+ const input=document.querySelector('input[name="providerType"][value="'+type+'"]');if(input)input.checked=true;
+ syncProviderType();
+ $('#proLegalName').value=saved.profile.legalName||'';
+ $('#proBusinessCity').value=saved.profile.businessCity||'Ankara';
+ $('#proBusinessDistrict').value=saved.profile.businessDistrict||'';
+ $('#proWebsite').value=saved.profile.website||'';
+ $('#proEstablished').value=saved.profile.established||'';
+ $('#proName').value=saved.profile.name;setChoices('profession',saved.profile.professions||[saved.profile.profession]);setChoices('area',saved.profile.areas||[saved.profile.district]);$('#proExperience').value=saved.profile.exp;$('#proBio').value=saved.profile.bio}location.hash='usta-kayit'}))}
 if(dashSection==='credits'){root.append(node('h2','','Teklif haklarım'));root.append(node('div','empty-state','Gerçek abonelik ve teklif hakkı bakiyesi, sunucu üyelik sistemi bağlandıktan sonra burada görüntülenecek.'));root.append(button('Paketleri incele →','btn btn-primary',()=>location.hash='paketler'))}}
 document.querySelectorAll('[data-dash]').forEach(b=>b.onclick=()=>{dashSection=b.dataset.dash;renderDash()});
 document.querySelectorAll('[data-auth]').forEach(b=>b.onclick=()=>{const which=b.dataset.auth;document.querySelectorAll('[data-auth]').forEach(x=>x.classList.toggle('active',x===b));$('#authLogin').classList.toggle('hidden',which!=='login');$('#authRegister').classList.toggle('hidden',which!=='register')});
