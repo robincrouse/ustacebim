@@ -415,3 +415,29 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .profile-demo-note{margin-top:15px;padding:11px;border-radius:9px;background:#eef8f5;color:#57766e;font-size:11px;line-height:1.55}
 @media(max-width:800px){.profile-body{grid-template-columns:1fr}.profile-body article{padding:20px}}
 @media(max-width:480px){.profile-info-row{grid-template-columns:95px minmax(0,1fr)}.profile-banner{padding:20px;gap:13px}.profile-banner h1{font-size:21px}.profile-banner .pro-avatar{width:60px;height:60px;flex:0 0 60px;font-size:24px}}
+
+/* Role-aware customer and professional dashboards */
+.dash-subtitle{color:#68808b;font-size:13px;margin:4px 0 19px}
+.dash-professional-card{display:flex;align-items:center;gap:15px;border:1px solid #dce9e8;background:linear-gradient(110deg,#f6fbfa,#ecf8f3);border-radius:14px;padding:18px;margin:18px 0}
+.dash-professional-avatar{display:grid;place-items:center;flex:0 0 62px;width:62px;height:62px;border-radius:12px;background:#fff;border:1px solid #d8e8e4;color:#0c8174;font-size:27px;font-weight:900}
+.dash-professional-copy{flex:1;min-width:0}
+.dash-professional-copy strong{font-size:17px;color:#173a4b}
+.dash-professional-copy p{font-size:12px;line-height:1.5;margin:5px 0;color:#486774}
+.dash-professional-copy small{font-size:11px;color:#6e838b}
+.dash-metrics,.dash-job-status{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.dash-metric{background:#f0f7f5;border:1px solid #e0ece8;padding:16px;border-radius:12px;display:flex;flex-direction:column;gap:6px}
+.dash-metric strong{font-size:25px;color:#183c4e}
+.dash-metric span{font-size:12px;color:#4f7180;font-weight:800}
+.dash-metric small{font-size:10px;line-height:1.5;color:#789098}
+.dash-quick-actions{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}
+.dash-secondary-btn{border:1px solid #cddfdf!important;background:#fff!important;color:#26766d!important}
+.dash-empty{border:1px dashed #cbdedc;background:#f8fbfa;border-radius:14px;padding:24px;margin:17px 0}
+.dash-empty h3{font-size:16px;margin:0 0 7px}
+.dash-empty p{font-size:13px;color:#657c87;margin:0;line-height:1.65}
+.dash-profile-detail{border:1px solid #dce9e8;border-radius:12px;overflow:hidden;margin-top:17px}
+.dash-profile-row{display:grid;grid-template-columns:145px minmax(0,1fr);gap:15px;padding:13px 16px;border-bottom:1px solid #e7eeee;font-size:12px}
+.dash-profile-row:last-child{border:0}
+.dash-profile-row span{color:#718691}
+.dash-profile-row strong{color:#1b4453;overflow-wrap:anywhere}
+@media(max-width:750px){.dash-professional-card{flex-wrap:wrap}.dash-professional-card>.btn{width:100%}.dash-metrics,.dash-job-status{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:500px){.dash-metrics,.dash-job-status{grid-template-columns:1fr}.dash-profile-row{grid-template-columns:1fr;gap:4px}.dash-menu{gap:6px}.dash-menu button{font-size:12px;padding:11px}}
