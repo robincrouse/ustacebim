@@ -2,15 +2,17 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#132f41"><meta name="description" content="UstaCebim Ankara pilot — hizmet bulma ve teklif platformu arayüz önizlemesi.">
-<title>UstaCebim | Hizmet bul, teklif al</title>
-<link rel="stylesheet" href="./assets/style.css?v=dashboard-roles-1">
-<script src="./assets/app.js?v=dashboard-roles-2" defer></script>
+<meta name="theme-color" content="#143e4a"><meta name="description" content="Hizmet Her Yerde — ihtiyaç duyduğun hizmeti bul, ustaları ve gelen teklifleri karşılaştır. Ankara pilot sürümü.">
+<title>Hizmet Her Yerde | Her işin bir ustası var</title>
+<link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+<meta property="og:type" content="website"><meta property="og:title" content="Hizmet Her Yerde | Her işin bir ustası var"><meta property="og:description" content="Hizmet arayanlarla uzman ustaları buluşturan platform. Ankara pilot önizlemesi.">
+<link rel="stylesheet" href="./assets/style.css?v=hhy-brand-1">
+<script src="./assets/app.js?v=hhy-brand-1" defer></script>
 </head>
 <body>
-<div class="topstrip">Ankara pilot sürümü · İşlem ve üyelikler şu anda test aşamasında</div>
+<div class="topstrip">Hizmet Her Yerde · Ankara pilotu · Platform önizleme aşamasında</div>
 <header class="site-header"><div class="shell header-inner">
-<a class="brand" href="#anasayfa" aria-label="UstaCebim ana sayfa"><span class="brand-mark">u<span>c</span></span><span>usta<strong>cebim</strong></span></a>
+<a class="brand" href="#anasayfa" aria-label="Hizmet Her Yerde ana sayfa"><span class="brand-mark" aria-hidden="true">H<span>•</span></span><span class="brand-name">Hizmet <strong>Her Yerde</strong></span></a>
 <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navlinks" aria-label="Menüyü aç">☰</button>
 <nav id="navlinks" class="nav-links" aria-label="Ana menü">
 <a href="#anasayfa" data-nav>Ana Sayfa</a><a href="#hizmetler" data-nav>Hizmet Kategorileri</a><a href="#talepler" data-nav>İş Fırsatları</a><a href="#ustalar" data-nav>Ustalar</a><a href="#paketler" data-nav>Paketler</a><a href="#panel" data-nav>Panelim</a>
@@ -20,9 +22,9 @@
 <main id="app" class="shell" tabindex="-1">
 <section id="anasayfa" class="page">
 <div class="hero">
-<div class="hero-copy"><div class="eyebrow"><span class="live-dot"></span> Ankara'da doğru hizmeti bulmanın kolay yolu</div>
-<h1>İşini anlat.<br><em>Ustalar sana ulaşsın.</em></h1>
-<p>İhtiyacını ücretsiz paylaş. Sistem işini ilgili meslek ve ilçedeki ustalara ulaştırsın; ilgilenen ustaların tekliflerini karşılaştır.</p>
+<div class="hero-copy"><div class="eyebrow"><span class="live-dot"></span> Hizmetin olduğu her yerde, doğru uzman yanında</div>
+<h1>Her işin bir ustası var.<br><em>Hizmet her yerde!</em></h1>
+<p>İhtiyacın olan hizmeti kolayca bul. Talebini oluştur, ilgili ustaları keşfet ve teklifleri karşılaştır. Ankara’da pilot olarak başlıyoruz.</p>
 <div class="hero-actions"><button class="btn btn-accent" data-page="talep-olustur">Ücretsiz Hizmet Talebi Oluştur <span>→</span></button></div>
 <div class="hero-pills"><span>✓ Talep oluşturmak ücretsiz</span><span>✓ Ankara pilotu</span></div></div>
 <div class="hero-visual"><div class="orb orb1"></div><div class="orb orb2"></div><div class="floating-card task-preview"><div class="preview-icon">🔧</div><div><small>HİZMET TALEBİ</small><strong>Evde su tesisatı onarımı</strong><span>📍 Çankaya, Ankara</span></div><span class="preview-check">✓</span></div><div class="floating-card pro-preview"><div class="avatar">U</div><div><small>USTA PROFİLİ</small><strong>Alanında uzman ustalar</strong><span>Deneyim • Hizmet bölgesi • Portföy</span></div></div><div class="orbit-symbol">✳</div></div>
@@ -43,7 +45,7 @@
 <section id="giris" class="page hidden">
 <div class="auth-layout auth-layout-wide">
   <div class="auth-card auth-card-horizontal">
-    <div class="auth-heading auth-wide-heading"><div class="auth-brand"><span class="auth-brand-icon" aria-hidden="true">uc</span><span>usta<strong>cebim</strong></span></div><h1>Hoş geldin!</h1><p>Tek hesapla hizmet al, iş fırsatlarını yönet.</p></div>
+    <div class="auth-heading auth-wide-heading"><div class="auth-brand"><span class="auth-brand-icon" aria-hidden="true">H•</span><span>Hizmet <strong>Her Yerde</strong></span></div><h1>Hoş geldin!</h1><p>Tek hesapla hizmet al, iş fırsatlarını yönet.</p></div>
     <div class="auth-columns">
       <div class="auth-main-column">
         <div class="auth-tabs" role="group" aria-label="Hesap işlemi"><button type="button" data-auth="login" class="active">Giriş Yap</button><button type="button" data-auth="register">Kayıt Ol</button></div>
@@ -139,5 +141,5 @@
 <section id="not-found" class="page hidden"><div class="empty-state"><h1>Sayfa bulunamadı</h1><p>Aradığın sayfa mevcut değil.</p><button class="btn btn-primary" data-page="anasayfa">Ana Sayfaya Dön</button></div></section>
 </main>
 <nav class="mobile-bottom-nav" aria-label="Mobil hızlı gezinme"><a href="#anasayfa" data-mobile-nav><span aria-hidden="true">⌂</span><strong>Ana Sayfa</strong></a><a href="#hizmetler" data-mobile-nav><span aria-hidden="true">⌕</span><strong>Hizmetler</strong></a><a href="#talep-olustur" data-mobile-nav class="mobile-main-action"><span aria-hidden="true">＋</span><strong>Talep Aç</strong></a><a href="#talepler" data-mobile-nav><span aria-hidden="true">▤</span><strong>Fırsatlar</strong></a><a href="#panel" data-mobile-nav><span aria-hidden="true">♙</span><strong>Hesabım</strong></a></nav>
-<footer class="footer"><div class="shell footer-grid"><div><div class="brand brand-footer"><span class="brand-mark">u<span>c</span></span><span>usta<strong>cebim</strong></span></div><p>Güvenle hizmet bul, işini büyüt.<br>Ankara pilot proje önizlemesi.</p></div><div><strong>Keşfet</strong><a href="#hizmetler">Hizmetler</a><a href="#ustalar">Ustalar</a><a href="#talepler">İş talepleri</a></div><div><strong>Hesabım</strong><a href="#giris">Giriş yap</a><a href="#usta-kayit">Hizmet veren ol</a><a href="#panel">Panelim</a></div><div><strong>Bilgilendirme</strong><p>Bu sürüm arayüz testidir. Gerçek kayıt, SMS, ödeme, fatura veya teklif gönderimi yapılmaz.</p></div></div><div class="shell footer-bottom">© 2026 UstaCebim · Geçici proje adı · Çizmece projesinden bağımsız</div></footer>
+<footer class="footer"><div class="shell footer-grid"><div><div class="brand brand-footer"><span class="brand-mark" aria-hidden="true">H<span>•</span></span><span class="brand-name">Hizmet <strong>Her Yerde</strong></span></div><p>Her işin bir ustası var.<br>Ankara pilot platform önizlemesi.</p></div><div><strong>Keşfet</strong><a href="#hizmetler">Hizmetler</a><a href="#ustalar">Ustalar</a><a href="#talepler">İş talepleri</a></div><div><strong>Hesabım</strong><a href="#giris">Giriş yap</a><a href="#usta-kayit">Hizmet veren ol</a><a href="#panel">Panelim</a></div><div><strong>Bilgilendirme</strong><p>Bu sürüm arayüz testidir. Gerçek kayıt, SMS, ödeme, fatura veya teklif gönderimi yapılmaz.</p></div></div><div class="shell footer-bottom">© 2026 Hizmet Her Yerde · Hizmet bulma platformu · Ankara pilot sürümü</div></footer>
 </body></html>
