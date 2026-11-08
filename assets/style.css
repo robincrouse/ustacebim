@@ -441,3 +441,20 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .dash-profile-row strong{color:#1b4453;overflow-wrap:anywhere}
 @media(max-width:750px){.dash-professional-card{flex-wrap:wrap}.dash-professional-card>.btn{width:100%}.dash-metrics,.dash-job-status{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:500px){.dash-metrics,.dash-job-status{grid-template-columns:1fr}.dash-profile-row{grid-template-columns:1fr;gap:4px}.dash-menu{gap:6px}.dash-menu button{font-size:12px;padding:11px}}
+
+/* Hizmet Her Yerde brand: trustworthy navy, teal and warm amber */
+:root{--navy:#143b49;--navy2:#215564;--teal:#078579;--teal2:#e7f6f1;--mint:#c0f3e4;--orange:#ffc783;--text:#173d49;--muted:#607883;--line:#dce8eb;--bg:#f6f9fa}
+.brand{font-size:19px;letter-spacing:-.065em;gap:10px}
+.brand-name{font-weight:700;letter-spacing:-.045em}
+.brand-name strong{font-weight:900;color:var(--teal)}
+.brand-mark{position:relative;border-radius:13px;width:43px;height:43px;flex:0 0 43px;background:linear-gradient(145deg,#143b49,#087f75);font-size:23px;letter-spacing:-.04em;box-shadow:0 5px 12px #103d4930}
+.brand-mark span{position:absolute;right:7px;top:5px;font-size:16px;color:#ffce8c;letter-spacing:0}
+.brand-footer .brand-name{color:#fff}
+.brand-footer .brand-name strong{color:#b4efde}
+.auth-brand{font-size:17px}
+.auth-brand-icon{letter-spacing:-.08em;background:linear-gradient(145deg,#153e4b,#078579)}
+.hero{background:radial-gradient(circle at 90% 10%,#238e80 0,transparent 37%),linear-gradient(120deg,#153d4d,#0b625f)}
+.hero h1{max-width:650px}
+.hero .eyebrow{border-color:#b6ddd84f}
+.topstrip{background:#143b49}
+@media(max-width:640px){.brand{font-size:15px;gap:7px}.brand-mark{width:36px;height:36px;flex-basis:36px;font-size:20px}.brand-mark span{right:5px;top:4px;font-size:13px}.auth-brand{font-size:14px}}
