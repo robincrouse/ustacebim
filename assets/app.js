@@ -192,13 +192,15 @@ $('#proGalleryFiles').addEventListener('change',e=>{
 window.addEventListener('pagehide',()=>{for(const url of mediaUrls)URL.revokeObjectURL(url);mediaUrls.clear()});
 
 
+let selectedProfessional=null;
 const pages=new Set([...document.querySelectorAll('.page')].map(x=>x.id));
 function go(page){const name=pages.has(page)?page:'not-found';document.querySelectorAll('.page').forEach(p=>p.classList.toggle('hidden',p.id!==name));document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+name));document.querySelectorAll('[data-mobile-nav]').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+name));$('#navlinks').classList.remove('open');$('#menuToggle').setAttribute('aria-expanded','false');if(name==='talepler')renderRequests();if(name==='ustalar')renderPros();if(name==='paketler')renderPlans();if(name==='panel')renderDash();window.scrollTo({top:0,behavior:'instant'});document.title=(name==='anasayfa'?'Hizmet bul, teklif al':({'hizmetler':'Hizmetler','talepler':'İş Talepleri','talep-olustur':'Talep Oluştur','ustalar':'Ustalar','giris':'Giriş Yap','telefon-giris':'Telefonla Giriş','usta-kayit':'Usta Ol','paketler':'Üyelik Paketleri','panel':'Panelim','usta-detay':'Usta Profili'}[name]||'UstaCebim'))+' | UstaCebim'}
 function route(){
  const page=decodeURIComponent(location.hash.slice(1)||'anasayfa');
  if(page==='usta-detay'){
-  if(saved.profile){
-   showPro({...saved.profile,initial:(saved.profile.name||'U').slice(0,1).toLocaleUpperCase('tr'),example:false},false);
+  if(selectedProfessional||saved.profile){
+   const pro=selectedProfessional||{...saved.profile,initial:(saved.profile.name||'U').slice(0,1).toLocaleUpperCase('tr'),example:false};
+   showPro(pro,false);
    return;
   }
   // A detail page cannot be opened directly without a selected profile.
@@ -250,7 +252,7 @@ $('#requestForm').addEventListener('submit',e=>{e.preventDefault();const categor
 function proCard(pro){const card=node('article','pro-card');const head=node('div','pro-head');const av=node('div','pro-avatar',pro.initial);const details=node('div');add(details,node('h3','',pro.name),node('p','',pro.profession));add(head,av,details);add(card,head,node('p','',pro.bio));const meta=node('div','pro-meta');add(meta,node('span','', '📍 '+pro.district),node('span','', '◷ '+pro.exp+' yıl deneyim'));card.appendChild(meta);card.append(button('Profili İncele →','btn btn-primary',()=>showPro(pro)));const tag=sampleTag();card.prepend(tag);return card}
 function allPros(){let result=[...mockPros];if(saved.profile)result.unshift({...saved.profile,id:0,initial:(saved.profile.name||'U').slice(0,1).toLocaleUpperCase('tr'),example:false});return result}
 function renderPros(){const root=$('#proList');root.replaceChildren();const cat=$('#proCategory').value,dist=$('#proDistrict').value;const list=allPros().filter(p=>(!cat||(p.professions||[p.profession]).includes(cat))&&(!dist||(p.areas||[p.district]).includes(dist)));list.forEach(p=>root.append(proCard(p)));if(!list.length)root.append(node('div','empty-state','Bu filtrelerde usta profili bulunamadı.'))}
-function showPro(pro,navigate=true){const root=$('#proDetail');root.replaceChildren();const banner=node('div','profile-banner'),avatar=node('div','pro-avatar',pro.initial),text=node('div');add(text,node('span','overline',pro.example!==false?'TEMSİLİ PROFİL':'YEREL ÖNİZLEME'),node('h1','',pro.name),node('p','',(pro.professions||[pro.profession]).join(' · ')+' · '+(pro.areas||[pro.district]).join(', ')+' / Ankara'));if(pro.example===false&&proMedia.avatar){const img=document.createElement('img');img.src=proMedia.avatar.url;img.alt='Profil görseli önizlemesi';avatar.replaceChildren(img);avatar.classList.add('profile-image-avatar')}
+function showPro(pro,navigate=true){selectedProfessional=pro;const root=$('#proDetail');root.replaceChildren();const banner=node('div','profile-banner'),avatar=node('div','pro-avatar',pro.initial),text=node('div');add(text,node('span','overline',pro.example!==false?'TEMSİLİ PROFİL':'YEREL ÖNİZLEME'),node('h1','',pro.name),node('p','',(pro.professions||[pro.profession]).join(' · ')+' · '+(pro.areas||[pro.district]).join(', ')+' / Ankara'));if(pro.example===false&&proMedia.avatar){const img=document.createElement('img');img.src=proMedia.avatar.url;img.alt='Profil görseli önizlemesi';avatar.replaceChildren(img);avatar.classList.add('profile-image-avatar')}
 if(pro.example===false&&proMedia.cover){banner.style.backgroundImage='linear-gradient(90deg,rgba(16,45,58,.87),rgba(16,45,58,.56)),url("'+proMedia.cover.url+'")';banner.style.backgroundSize='cover';banner.style.backgroundPosition='center'}
 add(banner,avatar,text);const body=node('div','profile-body'),about=node('article'),aside=node('article');add(about,node('h2','','Hakkında'),node('p','',pro.bio));add(aside,node('h3','','Hizmet bilgileri'));
 const details=[
