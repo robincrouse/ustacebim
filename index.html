@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#132f41"><meta name="description" content="UstaCebim Ankara pilot — hizmet bulma ve teklif platformu arayüz önizlemesi.">
 <title>UstaCebim | Hizmet bul, teklif al</title>
-<link rel="stylesheet" href="./assets/style.css?v=wizard-1">
-<script src="./assets/app.js?v=wizard-1" defer></script>
+<link rel="stylesheet" href="./assets/style.css?v=website-input-1">
+<script src="./assets/app.js?v=website-input-1" defer></script>
 </head>
 <body>
 <div class="topstrip">Ankara pilot sürümü · İşlem ve üyelikler şu anda test aşamasında</div>
@@ -90,7 +90,7 @@
 </div>
 <div class="wizard-step hidden" data-pro-step="1"><div class="wizard-step-heading"><h2>Seni tanıyalım</h2><p>Adını yaz, istersen logo veya profil fotoğrafı ekle.</p></div>
 <div class="form-grid"><label>Görünen ad / işletme adı <input id="proName" maxlength="100" required placeholder="Örn. Ankara Teknik Servis"></label><label>Deneyim (yıl) <input id="proExperience" type="number" min="0" max="70" placeholder="Örn. 8"></label></div>
-<div class="form-grid"><label>İnternet sitesi (isteğe bağlı) <input id="proWebsite" type="url" maxlength="250" placeholder="https://ornek.com"></label><label>Kuruluş yılı (isteğe bağlı) <input id="proEstablished" type="number" min="1900" max="2026" placeholder="Örn. 2018"></label></div>
+<div class="form-grid"><div class="website-field"><label for="proWebsiteName">İnternet sitesi <span class="form-hint">(isteğe bağlı)</span></label><div class="website-input-group"><span class="website-fixed">https://www.</span><input id="proWebsiteName" type="text" inputmode="url" maxlength="63" autocomplete="off" placeholder="siteadi" aria-label="Site adı"><span class="website-dot">.</span><input id="proWebsiteTld" type="text" list="proWebsiteExtensions" inputmode="url" maxlength="40" autocomplete="off" placeholder="com.tr" aria-label="Alan adı uzantısı"></div><datalist id="proWebsiteExtensions"><option value="com"><option value="com.tr"><option value="net"><option value="net.tr"><option value="org"><option value="org.tr"><option value="tr"><option value="xyz"></datalist><small class="website-example">Örnek: https://www.siteadi.com.tr</small></div><label>Kuruluş yılı (isteğe bağlı) <input id="proEstablished" type="number" min="1900" max="2026" placeholder="Örn. 2018"></label></div>
 
 <label>Hakkında / sunulan hizmetler <textarea id="proBio" maxlength="600" minlength="20" required placeholder="Deneyimini, çalışma biçimini ve müşterilere sunduğun hizmetleri açıkla."></textarea></label>
 
