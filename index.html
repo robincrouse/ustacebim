@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#132f41"><meta name="description" content="UstaCebim Ankara pilot — hizmet bulma ve teklif platformu arayüz önizlemesi.">
 <title>UstaCebim | Hizmet bul, teklif al</title>
-<link rel="stylesheet" href="./assets/style.css?v=profile-detail-1">
-<script src="./assets/app.js?v=buttons-fixed-20261108" defer></script>
+<link rel="stylesheet" href="./assets/style.css?v=dashboard-roles-1">
+<script src="./assets/app.js?v=dashboard-roles-1" defer></script>
 </head>
 <body>
 <div class="topstrip">Ankara pilot sürümü · İşlem ve üyelikler şu anda test aşamasında</div>
@@ -135,7 +135,7 @@
 <p class="form-note" id="proStatus" role="status" aria-live="polite"></p>
 </form><aside class="wizard-aside"><div class="mini-icon">🧰</div><h3>Başlamak çok kolay</h3><p>Şimdilik yalnızca temel bilgilerini doldurman yeterli. Görselleri daha sonra da ekleyebilirsin.</p><div class="wizard-note"><strong>Güvenli profil</strong><span>Vergi ve kimlik belgeleri herkese açık olmayacak. Gerçek belge yükleme henüz aktif değil.</span></div></aside></div></section>
 <section id="paketler" class="page hidden"><div class="page-intro center"><span class="overline">USTALARA ÖZEL</span><h1>İlk 30 gün ücretsiz, 15 teklif hakkı</h1><p>Profilin onaylandıktan sonra deneme süren başlar. Kredi kartı gerekmez; ücretli paket fiyatları taslaktır ve ödeme sistemi henüz aktif değildir.</p><div class="billing-toggle"><span>Aylık</span><label class="switch"><input id="billingYear" type="checkbox" aria-label="Yıllık fiyatları göster"><span class="slider"></span></label><span>Yıllık</span></div></div><div class="pricing-grid" id="pricingList"></div><div class="section-heading"><div><span class="overline">İLAVE HAKLAR</span><h2>Ek teklif paketleri</h2></div></div><div class="extras-grid" id="extraList"></div></section>
-<section id="panel" class="page hidden"><div class="page-intro"><span class="overline">KULLANICI PANELİ</span><h1>Kontrol panelim</h1><p>Talep ve profil taslaklarını görüntüle. Gerçek hesap ve abonelik yönetimi henüz aktif değil.</p></div><div class="dashboard"><aside class="dash-menu"><button data-dash="overview" class="active">▦ Genel Bakış</button><button data-dash="requests">▤ Taleplerim</button><button data-dash="profile">♙ Usta Profilim</button><button data-dash="credits">◈ Teklif Haklarım</button></aside><div id="dashboardContent" class="dash-main"></div></div></section>
+<section id="panel" class="page hidden"><div class="page-intro"><span class="overline" id="dashboardEyebrow">HESAP PANELİ</span><h1 id="dashboardHeading">Kontrol panelim</h1><p id="dashboardDescription">Hesap türüne göre taleplerini ve profilini görüntüle. Gerçek üyelik işlemleri henüz aktif değil.</p></div><div class="dashboard"><aside class="dash-menu" id="dashboardMenu" aria-label="Panel menüsü"></aside><div id="dashboardContent" class="dash-main"></div></div></section>
 <section id="not-found" class="page hidden"><div class="empty-state"><h1>Sayfa bulunamadı</h1><p>Aradığın sayfa mevcut değil.</p><button class="btn btn-primary" data-page="anasayfa">Ana Sayfaya Dön</button></div></section>
 </main>
 <nav class="mobile-bottom-nav" aria-label="Mobil hızlı gezinme"><a href="#anasayfa" data-mobile-nav><span aria-hidden="true">⌂</span><strong>Ana Sayfa</strong></a><a href="#hizmetler" data-mobile-nav><span aria-hidden="true">⌕</span><strong>Hizmetler</strong></a><a href="#talep-olustur" data-mobile-nav class="mobile-main-action"><span aria-hidden="true">＋</span><strong>Talep Aç</strong></a><a href="#talepler" data-mobile-nav><span aria-hidden="true">▤</span><strong>Fırsatlar</strong></a><a href="#panel" data-mobile-nav><span aria-hidden="true">♙</span><strong>Hesabım</strong></a></nav>
