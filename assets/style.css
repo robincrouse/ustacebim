@@ -398,3 +398,20 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  .website-input-group input{font-size:12px!important;padding:7px 5px!important}
  .website-input-group #proWebsiteTld{flex-basis:65px}
 }
+
+/* Compact professional profile preview */
+.profile-body{grid-template-columns:minmax(0,1.45fr) minmax(270px,1fr);align-items:start}
+.profile-body article{padding:24px}
+.profile-body article h2{font-size:23px;margin-bottom:12px}
+.profile-body article h3{font-size:17px;margin-bottom:13px}
+.profile-body article p{font-size:13px;line-height:1.7;margin:0}
+.profile-info-list{margin:0;display:grid;gap:10px}
+.profile-info-row{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px;font-size:12px;padding-bottom:9px;border-bottom:1px solid #edf2f3}
+.profile-info-row:last-child{border-bottom:0}
+.profile-info-row dt{color:#71838c}
+.profile-info-row dd{color:#234958;font-weight:700;margin:0;overflow-wrap:anywhere}
+.profile-website{margin-top:14px!important;font-size:12px!important;overflow-wrap:anywhere}
+.profile-website a{color:#087d71;text-decoration:underline}
+.profile-demo-note{margin-top:15px;padding:11px;border-radius:9px;background:#eef8f5;color:#57766e;font-size:11px;line-height:1.55}
+@media(max-width:800px){.profile-body{grid-template-columns:1fr}.profile-body article{padding:20px}}
+@media(max-width:480px){.profile-info-row{grid-template-columns:95px minmax(0,1fr)}.profile-banner{padding:20px;gap:13px}.profile-banner h1{font-size:21px}.profile-banner .pro-avatar{width:60px;height:60px;flex:0 0 60px;font-size:24px}}
