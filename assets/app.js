@@ -103,14 +103,29 @@ function updateWizard(){
  $('#proStatus').textContent='';
  if(wizardStep===3)wizardSummary();
 }
+function getProWebsite(){
+ const name=$('#proWebsiteName').value.trim().toLowerCase();
+ const ext=$('#proWebsiteTld').value.trim().toLowerCase().replace(/^\\.+/,'');
+ return {name,ext,url:name&&ext?'https://www.'+name+'.'+ext:''};
+}
+function setProWebsite(url){
+ let hostname='';
+ try{hostname=new URL(url).hostname.replace(/^www\\./,'')}catch{}
+ if(!hostname)return;
+ const parts=hostname.split('.');
+ $('#proWebsiteName').value=parts.shift()||'';
+ $('#proWebsiteTld').value=parts.join('.');
+}
 function validateWizardStep(step){
  const status=$('#proStatus');
  if(step===1){
   const name=$('#proName').value.trim(),bio=$('#proBio').value.trim();
   if(name.length<3){status.textContent='Lütfen görünen adını en az 3 karakter yaz.';$('#proName').focus();return false}
   if(bio.length<20){status.textContent='Kısaca kendini ve yaptığın işleri anlat (en az 20 karakter).';$('#proBio').focus();return false}
-  const website=$('#proWebsite').value.trim();
-  if(website&&(!['http:','https:'].includes((()=>{try{return new URL(website).protocol}catch{return ''}})())||!$('#proWebsite').checkValidity())){status.textContent='İnternet sitesi adresini kontrol et.';$('#proWebsite').focus();return false}
+  const {name,ext}=getProWebsite();
+  const validName=/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(name);
+  const validExt=/^[a-z]{2,}(?:\\.[a-z]{2,})*$/.test(ext);
+  if((name||ext)&&(!validName||!validExt)){status.textContent='Site adı ve uzantıyı kontrol et. Örnek: siteadi + com.tr';$('#proWebsiteName').focus();return false}
   const exp=$('#proExperience'),year=$('#proEstablished');
   if((exp.value&&!exp.checkValidity())||(year.value&&!year.checkValidity())){status.textContent='Deneyim veya kuruluş yılını kontrol et.';return false}
  }
@@ -246,7 +261,7 @@ $('#proForm').addEventListener('submit',e=>{
  const providerType=document.querySelector('input[name="providerType"]:checked')?.value||'individual';
  const legalName=$('#proLegalName').value.trim();
  if(providerType!=='individual'&&legalName.length<3){$('#proStatus').textContent='İşletmenin resmî unvanını yaz.';return}
- const website=$('#proWebsite').value.trim();
+ const website=getProWebsite().url;
  if(website && !/^https?:\/\//i.test(website)){$('#proStatus').textContent='İnternet sitesi http:// veya https:// ile başlamalı.';return}
  // Demo data intentionally excludes tax IDs, personal documents and private phone numbers.
  saved.profile={name,providerType,legalName:providerType==='individual'?'':legalName,
@@ -293,7 +308,7 @@ if(dashSection==='profile'){root.append(node('h2','','Usta profilim'));if(!saved
  $('#proLegalName').value=saved.profile.legalName||'';
  $('#proBusinessCity').value=saved.profile.businessCity||'Ankara';
  $('#proBusinessDistrict').value=saved.profile.businessDistrict||'';
- $('#proWebsite').value=saved.profile.website||'';
+ setProWebsite(saved.profile.website||'');
  $('#proEstablished').value=saved.profile.established||'';
  $('#proName').value=saved.profile.name;setChoices('profession',saved.profile.professions||[saved.profile.profession]);setChoices('area',saved.profile.areas||[saved.profile.district]);$('#proExperience').value=saved.profile.exp;$('#proBio').value=saved.profile.bio}location.hash='usta-kayit'}))}
 if(dashSection==='credits'){root.append(node('h2','','Teklif haklarım'));root.append(node('div','empty-state','Gerçek abonelik ve teklif hakkı bakiyesi, sunucu üyelik sistemi bağlandıktan sonra burada görüntülenecek.'));root.append(button('Paketleri incele →','btn btn-primary',()=>location.hash='paketler'))}}
