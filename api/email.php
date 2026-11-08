@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-// UstaCebim email registration + verification endpoint (PHP 8.1+).
+// Hizmet Her Yerde email registration + verification endpoint (PHP 8.1+).
 // /api/email.php : POST {action:"register"|"resend",...}; GET ?token=... ; POST verify.
 ini_set('display_errors', '0');
 header('Cache-Control: no-store, private');
@@ -16,8 +16,16 @@ function reply(int $status, array $data): never {
     exit;
 }
 function cfg(): array {
-    $path = dirname(__DIR__, 3) . '/private/ustacebim-config.php';
-    if (!is_file($path)) reply(503, ['ok'=>false,'message'=>'E-posta hizmeti henüz yapılandırılmadı.']);
+    // Supports both /httpdocs/api (new domain) and /httpdocs/ustacebim-test/api (old test).
+    $candidates = [
+        dirname(__DIR__, 2) . '/private/ustacebim-config.php',
+        dirname(__DIR__, 3) . '/private/ustacebim-config.php',
+    ];
+    $path = null;
+    foreach ($candidates as $candidate) {
+        if (is_file($candidate)) { $path = $candidate; break; }
+    }
+    if ($path === null) reply(503, ['ok'=>false,'message'=>'E-posta hizmeti henüz yapılandırılmadı.']);
     $data = require $path;
     if (!is_array($data)) reply(503, ['ok'=>false,'message'=>'E-posta hizmeti kullanılamıyor.']);
     return $data;
@@ -60,18 +68,18 @@ function mailVerify(array $cfg, string $address, string $name, string $token): v
         ? \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
         : \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
     $mail->CharSet = 'UTF-8';
-    $mail->setFrom($cfg['mail_from'], 'UstaCebim');
+    $mail->setFrom($cfg['mail_from'], 'Hizmet Her Yerde');
     $mail->addAddress($address, $name);
-    $mail->Subject = 'UstaCebim - E-posta adresini doğrula';
+    $mail->Subject = 'Hizmet Her Yerde - E-posta adresini doğrula';
     $base = rtrim($cfg['app_url'], '/');
     $url = $base . '/api/email.php?token=' . urlencode($token);
     $safe = htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     $mail->isHTML(true);
     $mail->Body = '<div style="font:16px Arial,sans-serif;max-width:580px;margin:auto;color:#17384b">'
-        . '<h2>UstaCebim hesabını doğrula</h2><p>E-posta adresini doğrulamak için aşağıdaki düğmeyi kullan.</p>'
+        . '<h2>Hizmet Her Yerde hesabını doğrula</h2><p>E-posta adresini doğrulamak için aşağıdaki düğmeyi kullan.</p>'
         . '<p><a href="' . $safe . '" style="display:inline-block;background:#0e8179;color:white;padding:13px 20px;border-radius:8px;text-decoration:none">E-postamı Doğrula</a></p>'
         . '<p>Bağlantı 30 dakika geçerlidir. Bu işlemi sen başlatmadıysan mesajı görmezden gelebilirsin.</p></div>';
-    $mail->AltBody = "UstaCebim hesabını doğrula:\n" . $url . "\nBu bağlantı 30 dakika geçerlidir.";
+    $mail->AltBody = "Hizmet Her Yerde hesabını doğrula:\n" . $url . "\nBu bağlantı 30 dakika geçerlidir.";
     $mail->send();
 }
 function createToken(PDO $pdo, int $userId): string {
@@ -108,7 +116,7 @@ function guardOrigin(array $cfg): void {
 function verifyPage(string $token): never {
     header('Content-Type: text/html; charset=utf-8');
     $safe = htmlspecialchars($token, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-    echo '<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>UstaCebim · E-posta doğrulama</title></head><body style="margin:0;background:#f5f8f9;font:16px Arial,sans-serif;color:#17384b"><main style="max-width:430px;margin:12vh auto;padding:30px;background:white;border:1px solid #dce8e8;border-radius:16px"><h1>E-postanı doğrula</h1><p>Hesabının e-posta adresini doğrulamak için devam et.</p><form method="post" action="email.php"><input type="hidden" name="action" value="verify"><input type="hidden" name="token" value="' . $safe . '"><button style="border:0;border-radius:9px;background:#0e8179;color:white;padding:13px 22px;font-weight:bold;cursor:pointer">E-postamı doğrula</button></form><p style="color:#71818a;font-size:12px">Bu işlem giriş yapmaz; yalnızca e-posta adresini onaylar.</p></main></body></html>';
+    echo '<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Hizmet Her Yerde · E-posta doğrulama</title></head><body style="margin:0;background:#f5f8f9;font:16px Arial,sans-serif;color:#17384b"><main style="max-width:430px;margin:12vh auto;padding:30px;background:white;border:1px solid #dce8e8;border-radius:16px"><h1>E-postanı doğrula</h1><p>Hesabının e-posta adresini doğrulamak için devam et.</p><form method="post" action="email.php"><input type="hidden" name="action" value="verify"><input type="hidden" name="token" value="' . $safe . '"><button style="border:0;border-radius:9px;background:#0e8179;color:white;padding:13px 22px;font-weight:bold;cursor:pointer">E-postamı doğrula</button></form><p style="color:#71818a;font-size:12px">Bu işlem giriş yapmaz; yalnızca e-posta adresini onaylar.</p></main></body></html>';
     exit;
 }
 try {
@@ -144,7 +152,7 @@ try {
         // Browser form submission gets human readable HTML, not raw JSON.
         if (!str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
             header('Content-Type: text/html; charset=utf-8');
-            echo '<!doctype html><html lang="tr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UstaCebim · Doğrulandı</title><body style="background:#f5f8f9;font:16px Arial,sans-serif;color:#17384b"><main style="max-width:430px;margin:12vh auto;background:white;padding:30px;border-radius:15px"><h1>E-posta doğrulandı ✓</h1><p>Adresin onaylandı. Giriş sistemi etkinleştirildiğinde hesabına giriş yapabileceksin.</p><a href="../#giris">UstaCebim’e dön</a></main></body></html>';
+            echo '<!doctype html><html lang="tr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hizmet Her Yerde · Doğrulandı</title><body style="background:#f5f8f9;font:16px Arial,sans-serif;color:#17384b"><main style="max-width:430px;margin:12vh auto;background:white;padding:30px;border-radius:15px"><h1>E-posta doğrulandı ✓</h1><p>Adresin onaylandı. Giriş sistemi etkinleştirildiğinde hesabına giriş yapabileceksin.</p><a href="../#giris">Hizmet Her Yerde’e dön</a></main></body></html>';
             exit;
         }
         reply(200,['ok'=>true,'message'=>'E-posta adresin doğrulandı.']);
@@ -183,6 +191,6 @@ try {
     mailVerify($cfg,$email,$displayName,$token);
     reply(200,['ok'=>true,'message'=>'Doğrulama bağlantısı için e-posta kutunu kontrol et.']);
 } catch (Throwable $e) {
-    error_log('UstaCebim email flow failed: '.get_class($e)); // NEVER log email, passwords, tokens or SMTP secrets
+    error_log('Hizmet Her Yerde email flow failed: '.get_class($e)); // NEVER log email, passwords, tokens or SMTP secrets
     reply(503,['ok'=>false,'message'=>'E-posta hizmeti şu anda kullanılamıyor. Daha sonra tekrar dene.']);
 }
