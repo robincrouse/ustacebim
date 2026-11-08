@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#132f41"><meta name="description" content="UstaCebim Ankara pilot — hizmet bulma ve teklif platformu arayüz önizlemesi.">
 <title>UstaCebim | Hizmet bul, teklif al</title>
-<link rel="stylesheet" href="./assets/style.css?v=provider-media-2">
-<script src="./assets/app.js?v=provider-media-2" defer></script>
+<link rel="stylesheet" href="./assets/style.css?v=wizard-1">
+<script src="./assets/app.js?v=wizard-1" defer></script>
 </head>
 <body>
 <div class="topstrip">Ankara pilot sürümü · İşlem ve üyelikler şu anda test aşamasında</div>
@@ -76,17 +76,25 @@
 </div>
 </section>
 <section id="telefon-giris" class="page hidden"><div class="narrow-card"><button class="back-link" data-page="giris">← Diğer giriş yöntemleri</button><div class="mini-icon">📱</div><h1>Telefonla giriş</h1><p>Numaranı yaz, tek kullanımlık kodla hesabını doğrula.</p><label>Telefon numarası <input id="phoneNumber" inputmode="tel" type="tel" placeholder="05XX XXX XX XX" maxlength="16"></label><button class="btn btn-primary full" id="phoneSend">Kod Gönder</button><div class="info-note">SMS altyapısı hazırlanıyor. Netgsm paketi ve sunucu entegrasyonu tamamlanmadan SMS gönderilmeyecek.</div><p class="form-note" id="phoneStatus" role="status"></p></div></section>
-<section id="usta-kayit" class="page hidden">
-<div class="page-intro compact"><span class="overline">HİZMET VEREN PROFİLİ</span><h1>Profesyonel profilini oluştur</h1><p>İster bireysel usta ister işletme olarak çalış. Müşterilerin göreceği bilgileri ve doğrulama için gereken işletme bilgilerini ayrı yönet.</p></div>
-<div class="trial-inline"><span class="trial-inline-icon">✦</span><div><strong>İlk 30 gün ücretsiz</strong><span>Profilin onaylanınca 15 teklif hakkı · 2 meslek · 3 ilçe</span></div><button class="mini-link" data-page="paketler">Detaylar →</button></div>
-<div class="form-layout"><form id="proForm" class="form-card">
-<div class="profile-section-heading"><span class="section-step">01</span><div><h3>Hizmet veren türü</h3><p>Bir şirketin olmasa da bireysel usta profili oluşturabilirsin.</p></div></div>
+<section id="usta-kayit" class="page hidden"><div class="page-intro compact"><span class="overline">USTA HESABI</span><h1>Usta profilini oluştur</h1><p>Dört kolay adımda profilini hazırla. Dilediğin zaman geri dönüp bilgilerini düzenleyebilirsin.</p></div>
+<div class="trial-inline"><span class="trial-inline-icon">✦</span><div><strong>İlk 30 gün ücretsiz</strong><span>Onaydan sonra 15 teklif · 2 meslek · 3 ilçe · Otomatik ödeme yok</span></div><button class="mini-link" data-page="paketler">Detaylar →</button></div>
+<div class="wizard-layout"><form id="proForm" class="form-card wizard-form" novalidate>
+<div class="wizard-progress"><div class="wizard-progress-top"><strong id="proWizardTitle">Hesap türü</strong><span id="proWizardCounter">1 / 4</span></div><div class="wizard-progress-track" aria-hidden="true"><span id="proWizardProgress"></span></div><div class="wizard-step-labels"><span>Hesap</span><span>Profil</span><span>Hizmetler</span><span>Onay</span></div></div>
+<div class="wizard-step" data-pro-step="0"><div class="wizard-step-heading"><h2>Nasıl hizmet veriyorsun?</h2><p>Profil türünü seçmen yeterli.</p></div>
 <div class="provider-type-options" role="radiogroup" aria-label="Hizmet veren türü">
 <label class="provider-type-option"><input type="radio" name="providerType" value="individual" checked><span><strong>Bireysel usta</strong><small>Kendi adına çalışıyorum</small></span></label>
 <label class="provider-type-option"><input type="radio" name="providerType" value="sole_proprietor"><span><strong>Şahıs işletmesi</strong><small>Vergi mükellefi olarak çalışıyorum</small></span></label>
 <label class="provider-type-option"><input type="radio" name="providerType" value="company"><span><strong>Şirket / firma</strong><small>Şirket adına hizmet veriyorum</small></span></label>
 </div>
-<div class="profile-section-heading"><span class="section-step">02</span><div><h3>Profil görselleri</h3><p>Logo veya profil fotoğrafını, kapak görselini ve en fazla 6 iş örneğini ekle.</p></div></div>
+
+</div>
+<div class="wizard-step hidden" data-pro-step="1"><div class="wizard-step-heading"><h2>Seni tanıyalım</h2><p>Adını yaz, istersen logo veya profil fotoğrafı ekle.</p></div>
+<div class="form-grid"><label>Görünen ad / işletme adı <input id="proName" maxlength="100" required placeholder="Örn. Ankara Teknik Servis"></label><label>Deneyim (yıl) <input id="proExperience" type="number" min="0" max="70" placeholder="Örn. 8"></label></div>
+<div class="form-grid"><label>İnternet sitesi (isteğe bağlı) <input id="proWebsite" type="url" maxlength="250" placeholder="https://ornek.com"></label><label>Kuruluş yılı (isteğe bağlı) <input id="proEstablished" type="number" min="1900" max="2026" placeholder="Örn. 2018"></label></div>
+
+<label>Hakkında / sunulan hizmetler <textarea id="proBio" maxlength="600" minlength="20" required placeholder="Deneyimini, çalışma biçimini ve müşterilere sunduğun hizmetleri açıkla."></textarea></label>
+
+<details class="wizard-optional"><summary>Logo, kapak ve fotoğraflar <span>İsteğe bağlı</span></summary><div class="wizard-optional-body">
 <div class="profile-media-grid">
  <div class="media-control"><label for="proAvatarFile" id="proAvatarLabel">Logo / Profil Fotoğrafı <span class="form-hint">JPG, PNG, WebP · 2 MB</span></label>
  <label class="media-uploader media-uploader-avatar" for="proAvatarFile"><span id="proAvatarPreview" class="media-preview media-avatar-preview" aria-hidden="true">＋</span><span>Görsel seç</span></label>
@@ -101,22 +109,31 @@
 <div id="proGalleryPreview" class="gallery-preview"><label for="proGalleryFiles" class="gallery-add" aria-label="Portföye fotoğraf ekle"><span>＋</span><small>İş görseli ekle</small></label></div>
 <input class="media-input" id="proGalleryFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple>
 <p class="media-help">Bu ekranda fotoğraflar sadece geçici önizlenir; sunucuya gönderilmez ve tarayıcıda saklanmaz.</p></div>
-<div class="profile-section-heading"><span class="section-step">03</span><div><h3>Profil bilgileri</h3><p>Bu alanlar, doğrulandıktan sonra müşteriye gösterilebilir.</p></div></div>
-<div class="form-grid"><label>Görünen ad / işletme adı <input id="proName" maxlength="100" required placeholder="Örn. Ankara Teknik Servis"></label><label>Deneyim (yıl) <input id="proExperience" type="number" min="0" max="70" placeholder="Örn. 8"></label></div>
-<div class="form-grid"><label>İnternet sitesi (isteğe bağlı) <input id="proWebsite" type="url" maxlength="250" placeholder="https://ornek.com"></label><label>Kuruluş yılı (isteğe bağlı) <input id="proEstablished" type="number" min="1900" max="2026" placeholder="Örn. 2018"></label></div>
+
+</div></details>
+</div>
+<div class="wizard-step hidden" data-pro-step="2"><div class="wizard-step-heading"><h2>Hangi işleri yapıyorsun?</h2><p>En fazla iki uzmanlık ve üç ilçe seç.</p></div>
 <fieldset class="selection-fieldset"><legend>Uzmanlık alanları <span class="form-hint">En fazla 2 meslek</span></legend><div id="proProfessionChoices" class="choice-grid" aria-label="Meslek seçimi"></div></fieldset>
 <fieldset class="selection-fieldset"><legend>Hizmet verdiğin ilçeler <span class="form-hint">En fazla 3 ilçe</span></legend><div id="proAreaChoices" class="choice-grid choice-grid-areas" aria-label="İlçe seçimi"></div></fieldset>
-<label>Hakkında / sunulan hizmetler <textarea id="proBio" maxlength="600" minlength="20" required placeholder="Deneyimini, çalışma biçimini ve müşterilere sunduğun hizmetleri açıkla."></textarea></label>
-<div class="profile-section-heading"><span class="section-step">04</span><div><h3>Şirket ve doğrulama bilgileri</h3><p>Şirket/işletme seçildiğinde gereken bilgiler gösterilir. Kamuya açık profilde vergi numarası yayımlanmaz.</p></div></div>
+
+</div>
+<div class="wizard-step hidden" data-pro-step="3"><div class="wizard-step-heading"><h2>Son kontrol</h2><p>Bilgilerini kontrol et ve profil önizlemesini oluştur.</p></div>
+<div id="proWizardSummary" class="wizard-summary" aria-live="polite"></div>
+<div id="businessWizardBlock"><h3 class="wizard-block-title">İşletme bilgileri</h3>
 <div id="businessFields" class="business-fields hidden">
 <div class="form-grid"><label>Resmî işletme unvanı <input id="proLegalName" maxlength="180" placeholder="Ticaret sicilindeki / vergi levhasındaki unvan"></label><label>Vergi dairesi <input id="proTaxOffice" maxlength="120" placeholder="Örn. Çankaya"></label></div>
 <div class="form-grid"><label>İşletme ili <input id="proBusinessCity" maxlength="100" value="Ankara"></label><label>İşletme ilçesi <select id="proBusinessDistrict"><option value="">İlçe seç</option></select></label></div>
 <div class="private-info-note"><strong>Özel bilgiler:</strong> Vergi kimlik numarası, ticaret sicil bilgisi ve vergi levhası gibi belgeler doğrulama sistemi açıldıktan sonra güvenli alanda alınacak. Bu demo formuna yazılmamalıdır.</div>
 </div>
-<div class="profile-section-heading"><span class="section-step">05</span><div><h3>Doğrulama belgeleri</h3><p>Vergi levhası, yetki veya ustalık belgeleri bu alanda sadece yönetici doğrulaması için istenebilir.</p></div></div>
-<div class="private-document-preview"><span aria-hidden="true">🔒</span><div><strong>Özel belge yükleme henüz kapalı</strong><p>Kimlik, vergi levhası veya diğer resmî belgeleri bu test sürümüne yükleme. Güvenli, giriş gerektiren belge yükleme sistemi tamamlandığında yalnız yetkili yöneticiler inceleyebilecek.</p></div></div>
-<div class="form-actions"><button class="btn btn-primary" type="submit">Profil Taslağını Kaydet →</button></div><p class="form-note" id="proStatus" role="status"></p>
-</form><aside class="side-help"><div class="mini-icon">🧰</div><h3>İyi bir profil nasıl olmalı?</h3><p>Müşteriler en çok deneyimini, hizmet bölgeni ve önceki işlerini görmek ister.</p><ul><li>Gerçek uzmanlık alanlarını seç</li><li>İşletmeysen resmî unvanını belirt</li><li>İş örneklerini ve belgelerini doğrulamaya hazırla</li><li>İletişim ve özel şirket bilgilerini herkese açma</li></ul><div class="info-note">Yazılı profil taslağı bu tarayıcıda kalır; görseller yalnız seçildiği oturumda önizlenir. Resmî belge yükleme ve gerçek onay henüz etkin değil.</div></aside></div></section>
+
+</div>
+<details class="wizard-optional"><summary>Doğrulama belgeleri hakkında bilgi</summary><div class="wizard-optional-body"><div class="private-document-preview"><span aria-hidden="true">🔒</span><div><strong>Özel belge yükleme henüz kapalı</strong><p>Kimlik, vergi levhası veya diğer resmî belgeleri bu test sürümüne yükleme. Güvenli, giriş gerektiren belge yükleme sistemi tamamlandığında yalnız yetkili yöneticiler inceleyebilecek.</p></div></div>
+</div></details>
+<div class="private-info-note">Bu bir test ekranıdır. Bilgiler yalnızca bu tarayıcıda taslak olarak saklanır; resmî üyelik veya onay başvurusu oluşturmaz.</div>
+</div>
+<div class="wizard-footer"><button type="button" class="btn wizard-back" id="proWizardBack">← Geri</button><button type="button" class="btn btn-primary" id="proWizardNext">Devam →</button><button type="submit" class="btn btn-primary hidden" id="proWizardSubmit">Profil Önizlemesini Aç →</button></div>
+<p class="form-note" id="proStatus" role="status" aria-live="polite"></p>
+</form><aside class="wizard-aside"><div class="mini-icon">🧰</div><h3>Başlamak çok kolay</h3><p>Şimdilik yalnızca temel bilgilerini doldurman yeterli. Görselleri daha sonra da ekleyebilirsin.</p><div class="wizard-note"><strong>Güvenli profil</strong><span>Vergi ve kimlik belgeleri herkese açık olmayacak. Gerçek belge yükleme henüz aktif değil.</span></div></aside></div></section>
 <section id="paketler" class="page hidden"><div class="page-intro center"><span class="overline">USTALARA ÖZEL</span><h1>İlk 30 gün ücretsiz, 15 teklif hakkı</h1><p>Profilin onaylandıktan sonra deneme süren başlar. Kredi kartı gerekmez; ücretli paket fiyatları taslaktır ve ödeme sistemi henüz aktif değildir.</p><div class="billing-toggle"><span>Aylık</span><label class="switch"><input id="billingYear" type="checkbox" aria-label="Yıllık fiyatları göster"><span class="slider"></span></label><span>Yıllık</span></div></div><div class="pricing-grid" id="pricingList"></div><div class="section-heading"><div><span class="overline">İLAVE HAKLAR</span><h2>Ek teklif paketleri</h2></div></div><div class="extras-grid" id="extraList"></div></section>
 <section id="panel" class="page hidden"><div class="page-intro"><span class="overline">KULLANICI PANELİ</span><h1>Kontrol panelim</h1><p>Talep ve profil taslaklarını görüntüle. Gerçek hesap ve abonelik yönetimi henüz aktif değil.</p></div><div class="dashboard"><aside class="dash-menu"><button data-dash="overview" class="active">▦ Genel Bakış</button><button data-dash="requests">▤ Taleplerim</button><button data-dash="profile">♙ Usta Profilim</button><button data-dash="credits">◈ Teklif Haklarım</button></aside><div id="dashboardContent" class="dash-main"></div></div></section>
 <section id="not-found" class="page hidden"><div class="empty-state"><h1>Sayfa bulunamadı</h1><p>Aradığın sayfa mevcut değil.</p><button class="btn btn-primary" data-page="anasayfa">Ana Sayfaya Dön</button></div></section>
