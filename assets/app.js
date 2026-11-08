@@ -331,20 +331,125 @@ function renderPlans(){
  extras.forEach(p=>{const c=node('article','extra-card'),left=node('div');add(left,node('h3','',p[0]+' ek teklif hakkı'),node('p','','Örnek ek paket — satışı kapalı'));add(c,left,node('strong','',formatTL(p[1])));extra.append(c)});
 }
 $('#billingYear').onchange=renderPlans;renderPlans();
-let dashSection='overview';function renderDash(){const root=$('#dashboardContent');root.replaceChildren();document.querySelectorAll('[data-dash]').forEach(b=>b.classList.toggle('active',b.dataset.dash===dashSection));if(dashSection==='overview'){add(root,node('h2','','Genel bakış'),node('p','', 'Demo sürümündeki yerel taslakların.'));const stats=node('div','stats-grid');[['Talep taslağı',saved.requests.length],['Usta profili',saved.profile?'1':'0'],['Gerçek teklif hakkı','—']].forEach(x=>{const s=node('div','stat');add(s,node('strong','',x[1]),node('small','',x[0]));stats.append(s)});root.append(stats);root.append(node('p','info-note','Bu bilgiler yalnızca bu tarayıcıda saklanır. Gerçek kullanıcı hesabı ve teklifler henüz bağlı değildir.'))}
-if(dashSection==='requests'){root.append(node('h2','','Taleplerim'));if(!saved.requests.length)root.append(node('p','', 'Henüz yerel talep taslağın bulunmuyor.'));saved.requests.forEach(r=>root.append(requestCard(r)));root.append(button('Yeni talep oluştur →','btn btn-primary',()=>location.hash='talep-olustur'))}
-if(dashSection==='profile'){root.append(node('h2','','Usta profilim'));if(!saved.profile)root.append(node('p','', 'Henüz örnek usta profilin yok.'));else{root.append(node('h3','',saved.profile.name));root.append(node('p','',saved.profile.profession+' · '+saved.profile.district));root.append(node('p','',saved.profile.bio))}root.append(button('Profili düzenle →','btn btn-primary',()=>{if(saved.profile){
- const type=saved.profile.providerType||'individual';
- const input=document.querySelector('input[name="providerType"][value="'+type+'"]');if(input)input.checked=true;
- syncProviderType();
- $('#proLegalName').value=saved.profile.legalName||'';
- $('#proBusinessCity').value=saved.profile.businessCity||'Ankara';
- $('#proBusinessDistrict').value=saved.profile.businessDistrict||'';
- setProWebsite(saved.profile.website||'');
- $('#proEstablished').value=saved.profile.established||'';
- $('#proName').value=saved.profile.name;setChoices('profession',saved.profile.professions||[saved.profile.profession]);setChoices('area',saved.profile.areas||[saved.profile.district]);$('#proExperience').value=saved.profile.exp;$('#proBio').value=saved.profile.bio}location.hash='usta-kayit'}))}
-if(dashSection==='credits'){root.append(node('h2','','Teklif haklarım'));root.append(node('div','empty-state','Gerçek abonelik ve teklif hakkı bakiyesi, sunucu üyelik sistemi bağlandıktan sonra burada görüntülenecek.'));root.append(button('Paketleri incele →','btn btn-primary',()=>location.hash='paketler'))}}
-document.querySelectorAll('[data-dash]').forEach(b=>b.onclick=()=>{dashSection=b.dataset.dash;renderDash()});
+let dashSection='overview';
+function dashboardStat(label,value,detail){
+ const el=node('div','dash-metric');add(el,node('strong','',value),node('span','',label));
+ if(detail)el.append(node('small','',detail));
+ return el;
+}
+function dashboardEmpty(title,details){
+ const el=node('div','dash-empty');
+ add(el,node('h3','',title),node('p','',details));
+ return el;
+}
+function editProfessionalProfile(){
+ if(saved.profile){
+  const type=saved.profile.providerType||'individual';
+  const input=document.querySelector('input[name="providerType"][value="'+type+'"]');if(input)input.checked=true;
+  syncProviderType();
+  $('#proLegalName').value=saved.profile.legalName||'';
+  $('#proBusinessCity').value=saved.profile.businessCity||'Ankara';
+  $('#proBusinessDistrict').value=saved.profile.businessDistrict||'';
+  setProWebsite(saved.profile.website||'');
+  $('#proEstablished').value=saved.profile.established||'';
+  $('#proName').value=saved.profile.name;
+  setChoices('profession',saved.profile.professions||[saved.profile.profession]);
+  setChoices('area',saved.profile.areas||[saved.profile.district]);
+  $('#proExperience').value=saved.profile.exp;
+  $('#proBio').value=saved.profile.bio;
+ }
+ location.hash='usta-kayit';
+}
+function buildDashMenu(isProfessional){
+ const menu=$('#dashboardMenu');menu.replaceChildren();
+ const items=isProfessional?
+  [['overview','▦ Genel Bakış'],['opportunities','▤ İş Fırsatları'],['quotes','◈ Tekliflerim'],['messages','✉ Görüşmeler'],['jobs','✓ İş Geçmişim'],['profile','♙ Usta Profilim'],['credits','◇ Teklif Haklarım']]:
+  [['overview','▦ Genel Bakış'],['requests','▤ Taleplerim'],['profile','♙ Hesap Bilgilerim']];
+ if(!items.some(x=>x[0]===dashSection))dashSection='overview';
+ items.forEach(([id,label])=>{
+  const btn=node('button',dashSection===id?'active':'',label);
+  btn.type='button';btn.dataset.dash=id;
+  btn.setAttribute('aria-current',dashSection===id?'page':'false');
+  btn.addEventListener('click',()=>{dashSection=id;renderDash()});
+  menu.append(btn);
+ });
+}
+function renderDash(){
+ const root=$('#dashboardContent');root.replaceChildren();
+ // There is no authenticated server account yet. A local professional draft
+ // switches the demo into professional mode without inventing actual jobs.
+ const isProfessional=Boolean(saved.profile);
+ $('#dashboardEyebrow').textContent=isProfessional?'USTA PANELİ':'MÜŞTERİ PANELİ · ÖNİZLEME';
+ $('#dashboardHeading').textContent=isProfessional?'Usta panelim':'Kontrol panelim';
+ $('#dashboardDescription').textContent=isProfessional?
+  'Profilini, tekliflerini, müşteri görüşmelerini ve iş geçmişini buradan takip edeceksin. Bu sürüm henüz önizlemedir.':
+  'Hizmet taleplerini bu bölümden takip edebilirsin. Gerçek hesap ve mesajlaşma henüz aktif değil.';
+ buildDashMenu(isProfessional);
+ if(isProfessional){
+  const pro=saved.profile;
+  if(dashSection==='overview'){
+   add(root,node('h2','','Genel bakış'),node('p','dash-subtitle','Hizmet veren hesabının özeti'));
+   const box=node('div','dash-professional-card');
+   const initials=node('div','dash-professional-avatar',(pro.name||'U').slice(0,1).toLocaleUpperCase('tr'));
+   const main=node('div','dash-professional-copy');
+   add(main,node('strong','',pro.name),node('p','',(pro.professions||[pro.profession]).join(' · ')),node('small','','Hizmet bölgeleri: '+(pro.areas||[pro.district]).join(', ')));
+   add(box,initials,main,button('Profilimi gör →','btn btn-primary',()=>showPro({...pro,initial:(pro.name||'U')[0].toLocaleUpperCase('tr'),example:false})));
+   root.append(box);
+   const metrics=node('div','dash-metrics');
+   add(metrics,dashboardStat('Aktif işler','—','Gerçek hesap henüz bağlı değil'),dashboardStat('Gönderilen teklifler','—','Gerçek teklifler bağlanacak'),dashboardStat('Teklif bakiyesi','—','Sunucu üyeliği gerekiyor'));
+   root.append(metrics);
+   const shortcuts=node('div','dash-quick-actions');
+   add(shortcuts,button('İş fırsatlarını incele →','btn btn-primary',()=>{location.hash='talepler'}),button('Profilimi düzenle','btn dash-secondary-btn',editProfessionalProfile));
+   root.append(shortcuts);
+   root.append(node('p','info-note','Bu profil yalnızca tarayıcıdaki taslaktır. Müşteri görüşmesi, iş kaydı ve teklif hakkı şu an sunucudan okunmuyor.'));
+  }else if(dashSection==='opportunities'){
+   add(root,node('h2','','İş fırsatları'),node('p','dash-subtitle','Mesleğine ve hizmet bölgenle eşleşen talepler bu alanda listelenecek.'));
+   root.append(dashboardEmpty('Henüz canlı iş fırsatı yok','Doğrulanmış usta hesabı, eşleşme sistemi ve iş bildirimleri henüz bağlı değil.'));
+   root.append(button('Örnek iş fırsatlarını gör →','btn btn-primary',()=>{location.hash='talepler'}));
+  }else if(dashSection==='quotes'){
+   add(root,node('h2','','Tekliflerim'),node('p','dash-subtitle','Gönderilen, bekleyen, kabul edilen ve reddedilen fiyat tekliflerini takip et.'));
+   root.append(dashboardEmpty('Henüz gönderilmiş teklif yok','Teklif gönderme ve kabul akışı gerçek üyelik sistemine bağlandığında kayıtlar burada görünecek.'));
+  }else if(dashSection==='messages'){
+   add(root,node('h2','','Müşteri görüşmeleri'),node('p','dash-subtitle','Müşterilerle yaptığın görüşmeler ve kabul edilen tekliflere ilişkin iletişim kayıtları burada yer alacak.'));
+   root.append(dashboardEmpty('Henüz görüşme kaydı yok','Gerçek mesajlaşma henüz kurulmadı. Müşteri telefon bilgileri yalnız teklif kabul edildiğinde yetkili ustaya açılacak.'));
+  }else if(dashSection==='jobs'){
+   add(root,node('h2','','İş geçmişim'),node('p','dash-subtitle','Devam eden, tamamlanan ve iptal edilen işlerini burada takip edeceksin.'));
+   const tabs=node('div','dash-job-status');
+   [['Devam eden','—'],['Tamamlanan','—'],['İptal edilen','—']].forEach(([label,num])=>add(tabs,dashboardStat(label,num)));
+   root.append(tabs);
+   root.append(dashboardEmpty('Henüz iş kaydı yok','Müşteri tarafından teklif kabul edildiğinde iş kaydı oluşturulacak. İş tamamlandığında iki tarafın onayı ve değerlendirmeler burada görüntülenecek.'));
+  }else if(dashSection==='profile'){
+   add(root,node('h2','','Usta profilim'));
+   const box=node('div','dash-profile-detail');
+   const rows=[['Görünen ad',pro.name],['Hesap türü',({individual:'Bireysel usta',sole_proprietor:'Şahıs işletmesi',company:'Şirket / firma'}[pro.providerType]||'Bireysel usta')],['Uzmanlıklar',(pro.professions||[pro.profession]).join(', ')],['Hizmet bölgeleri',(pro.areas||[pro.district]).join(', ')],['Deneyim',(pro.exp||0)+' yıl']];
+   if(pro.website)rows.push(['Web sitesi',pro.website]);
+   rows.forEach(([label,value])=>{const row=node('div','dash-profile-row');add(row,node('span','',label),node('strong','',value));box.append(row)});
+   root.append(box);
+   const buttons=node('div','dash-quick-actions');
+   add(buttons,button('Profili düzenle →','btn btn-primary',editProfessionalProfile),button('Önizlemeyi aç','btn dash-secondary-btn',()=>showPro({...pro,initial:pro.name[0].toLocaleUpperCase('tr'),example:false})));
+   root.append(buttons);
+   root.append(node('p','info-note','Bu profil henüz yönetici tarafından doğrulanmış veya canlı sistemde yayımlanmış değildir.'));
+  }else if(dashSection==='credits'){
+   add(root,node('h2','','Teklif haklarım'));
+   root.append(dashboardEmpty('Teklif bakiyesi henüz hesaplanmıyor','Onaylanan ustalara 30 gün veya 15 teklif hakkı (hangisi önce biterse) ücretsiz deneme tanımlanacak. Bu hak sadece bir kez verilecek; gerçek bakiye veritabanından okunacak.'));
+   root.append(button('Paketleri incele →','btn btn-primary',()=>location.hash='paketler'));
+  }
+ }else{
+  if(dashSection==='overview'){
+   add(root,node('h2','','Genel bakış'),node('p','dash-subtitle','Müşteri tarafındaki talep taslakların.'));
+   const metrics=node('div','dash-metrics');add(metrics,dashboardStat('Talep taslağı',String(saved.requests.length)),dashboardStat('Gerçek görüşmeler','—','Mesajlaşma henüz bağlı değil'));root.append(metrics);
+   root.append(button('Hizmet talebi oluştur →','btn btn-primary',()=>location.hash='talep-olustur'));
+   root.append(node('p','info-note','Bu panel müşteri önizlemesidir. Usta profili oluşturduğunda usta paneli görünecek.'));
+  }else if(dashSection==='requests'){
+   add(root,node('h2','','Taleplerim'),node('p','dash-subtitle','Oluşturduğun hizmet taleplerinin taslakları.'));
+   if(!saved.requests.length)root.append(dashboardEmpty('Henüz talep taslağın yok','Hizmet almak için yeni bir talep oluşturabilirsin.'));
+   saved.requests.forEach(r=>root.append(requestCard(r)));
+   root.append(button('Yeni talep oluştur →','btn btn-primary',()=>location.hash='talep-olustur'));
+  }else if(dashSection==='profile'){
+   add(root,node('h2','','Hesap bilgilerim'),dashboardEmpty('Müşteri hesabı henüz aktif değil','E-posta doğrulaması ve giriş sistemi tamamlandığında müşteri bilgilerin burada bulunacak.'));
+  }
+ }
+}
 document.querySelectorAll('[data-auth]').forEach(b=>b.onclick=()=>{const which=b.dataset.auth;document.querySelectorAll('[data-auth]').forEach(x=>x.classList.toggle('active',x===b));$('#authLogin').classList.toggle('hidden',which!=='login');$('#authRegister').classList.toggle('hidden',which!=='register')});
 $('#phoneSend').addEventListener('click',()=>{$('#phoneStatus').textContent='SMS gönderilmedi. Bu sürümde Netgsm bağlantısı ve gerçek telefon doğrulaması etkin değil.'});
 
