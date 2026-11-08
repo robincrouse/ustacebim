@@ -330,3 +330,53 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .profile-gallery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .profile-gallery-grid img{width:100%;height:170px;object-fit:cover;border-radius:10px}
 @media(max-width:660px){.profile-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.profile-gallery-grid img{height:125px}}
+
+/* Compact four-step professional signup */
+.wizard-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:20px;align-items:start;max-width:1040px;margin:0 auto}
+.wizard-form{min-width:0}
+.wizard-progress{padding-bottom:19px;border-bottom:1px solid #e2eaed;margin-bottom:21px}
+.wizard-progress-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:11px}
+.wizard-progress-top strong{font-size:15px;color:#173e4c}
+.wizard-progress-top span{font-size:12px;font-weight:800;color:#0c8274}
+.wizard-progress-track{height:6px;border-radius:99px;background:#e6eeef;overflow:hidden}
+.wizard-progress-track span{display:block;height:100%;width:25%;border-radius:99px;background:#138c80;transition:width .18s ease}
+.wizard-step-labels{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:10px;color:#7a8f98;font-weight:700}
+.wizard-step-heading{margin-bottom:20px}
+.wizard-step-heading h2{font-size:20px;letter-spacing:-.3px;margin:0 0 6px;color:#133b4c}
+.wizard-step-heading p{font-size:12px;color:#71828c;margin:0;line-height:1.5}
+.wizard-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid #e2eaed;margin-top:22px;padding-top:17px}
+.wizard-footer .btn-primary{margin-left:auto}
+.wizard-footer .hidden,.wizard-step.hidden,#businessWizardBlock.hidden{display:none!important}
+.wizard-back{border:1px solid #cddcdf!important;background:#fff!important;color:#41616e!important}
+.wizard-optional{border:1px solid #deeaeb;border-radius:12px;margin-top:19px;background:#fafdfc}
+.wizard-optional summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 15px;font-size:13px;color:#285366;font-weight:800;list-style:none}
+.wizard-optional summary::-webkit-details-marker{display:none}
+.wizard-optional summary:after{content:'＋';color:#15887a;font-size:19px;font-weight:400}
+.wizard-optional[open] summary:after{content:'−'}
+.wizard-optional summary span{font-size:11px;color:#80929c;font-weight:500;margin-left:auto}
+.wizard-optional-body{padding:5px 15px 16px}
+.wizard-optional-body .profile-media-grid{margin-top:0}
+.wizard-summary{border:1px solid #e1eaec;background:#f8fbfa;border-radius:12px;overflow:hidden;margin-bottom:20px}
+.wizard-summary-row{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;padding:11px 14px;border-bottom:1px solid #e1eaec;font-size:12px}
+.wizard-summary-row:last-child{border:0}
+.wizard-summary-row span{color:#71858e;min-width:90px}
+.wizard-summary-row strong{color:#284957;text-align:right;overflow-wrap:anywhere}
+.wizard-block-title{font-size:14px;margin:0 0 12px}
+.wizard-aside{border:1px solid #e1e9ed;border-radius:13px;background:#fff;padding:20px;box-shadow:0 7px 20px rgba(20,51,67,.045)}
+.wizard-aside h3{font-size:16px;margin:10px 0}
+.wizard-aside p{font-size:12px;line-height:1.65;color:#647b87}
+.wizard-note{display:flex;flex-direction:column;gap:5px;padding:12px;background:#f2f8f6;border-radius:10px;margin-top:18px;font-size:11px;line-height:1.5;color:#59726e}
+.wizard-note strong{font-size:12px;color:#1e7169}
+.wizard-step .provider-type-options{grid-template-columns:1fr;gap:10px}
+.wizard-step .provider-type-option{min-height:65px;align-items:center}
+.wizard-step .provider-type-option span{gap:3px}
+@media(max-width:900px){.wizard-layout{grid-template-columns:1fr;max-width:750px}.wizard-aside{display:none}}
+@media(max-width:660px){
+ .wizard-form{padding:18px!important}
+ .wizard-step-heading h2{font-size:18px}
+ .wizard-step-labels{font-size:9px}
+ .wizard-footer .btn{font-size:12px;padding:11px 14px}
+ .wizard-summary-row{flex-direction:column;gap:4px}
+ .wizard-summary-row strong{text-align:left}
+ .wizard-optional-body{padding:3px 10px 12px}
+}
