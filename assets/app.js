@@ -81,6 +81,54 @@ function syncProviderType(){
 document.querySelectorAll('input[name="providerType"]').forEach(r=>r.addEventListener('change',syncProviderType));
 syncProviderType();
 
+const proMedia={avatar:null,cover:null,gallery:[]};
+const mediaUrls=new Set();
+function releaseUrl(url){if(url){URL.revokeObjectURL(url);mediaUrls.delete(url)}}
+function imageAllowed(file,maxMb){
+ return file&&['image/jpeg','image/png','image/webp'].includes(file.type)&&file.size<=maxMb*1024*1024&&file.size>0;
+}
+function renderMediaPreview(kind,holder){
+ const item=proMedia[kind],el=$(holder);el.replaceChildren();
+ if(item){
+  const img=document.createElement('img');img.src=item.url;img.alt=kind==='avatar'?'Seçilen profil görseli':'Seçilen kapak görseli';el.append(img);
+ }else el.textContent=kind==='avatar'?'＋':'▧';
+}
+function setSingleMedia(kind,file,limit){
+ if(!imageAllowed(file,limit)){showToast('Lütfen JPG, PNG veya WebP görseli seç (en fazla '+limit+' MB).');return}
+ if(proMedia[kind])releaseUrl(proMedia[kind].url);
+ const url=URL.createObjectURL(file);mediaUrls.add(url);proMedia[kind]={url,name:file.name};
+ renderMediaPreview(kind,kind==='avatar'?'#proAvatarPreview':'#proCoverPreview');
+}
+$('#proAvatarFile').addEventListener('change',e=>{if(e.target.files[0])setSingleMedia('avatar',e.target.files[0],2);e.target.value=''});
+$('#proCoverFile').addEventListener('change',e=>{if(e.target.files[0])setSingleMedia('cover',e.target.files[0],4);e.target.value=''});
+[['#removeAvatar','avatar','#proAvatarPreview'],['#removeCover','cover','#proCoverPreview']].forEach(([buttonId,kind,holder])=>{
+ $(buttonId).addEventListener('click',()=>{if(proMedia[kind])releaseUrl(proMedia[kind].url);proMedia[kind]=null;renderMediaPreview(kind,holder)});
+});
+function renderGallery(){
+ const root=$('#proGalleryPreview');root.replaceChildren();
+ for(const entry of proMedia.gallery){
+  const item=node('div','gallery-item');
+  const img=document.createElement('img');img.src=entry.url;img.alt='İş örneği görseli';
+  const del=button('×','gallery-remove',()=>{proMedia.gallery=proMedia.gallery.filter(x=>x!==entry);releaseUrl(entry.url);renderGallery()});
+  del.setAttribute('aria-label','İş örneğini kaldır');add(item,img,del);root.append(item);
+ }
+ if(proMedia.gallery.length<6){
+  const label=node('label','gallery-add');label.htmlFor='proGalleryFiles';
+  add(label,node('span','','＋'),node('small','','İş görseli ekle'));root.append(label);
+ }
+}
+$('#proGalleryFiles').addEventListener('change',e=>{
+ const entries=Array.from(e.target.files||[]);
+ for(const file of entries){
+  if(proMedia.gallery.length>=6){showToast('En fazla 6 iş görseli eklenebilir.');break}
+  if(!imageAllowed(file,4)){showToast('Yalnız 4 MB altında JPG, PNG veya WebP görseli ekle.');continue}
+  const url=URL.createObjectURL(file);mediaUrls.add(url);
+  proMedia.gallery.push({url,name:file.name});
+ }
+ e.target.value='';renderGallery();
+});
+window.addEventListener('pagehide',()=>{for(const url of mediaUrls)URL.revokeObjectURL(url);mediaUrls.clear()});
+
 
 const pages=new Set([...document.querySelectorAll('.page')].map(x=>x.id));
 function go(page){const name=pages.has(page)?page:'not-found';document.querySelectorAll('.page').forEach(p=>p.classList.toggle('hidden',p.id!==name));document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+name));document.querySelectorAll('[data-mobile-nav]').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+name));$('#navlinks').classList.remove('open');$('#menuToggle').setAttribute('aria-expanded','false');if(name==='talepler')renderRequests();if(name==='ustalar')renderPros();if(name==='paketler')renderPlans();if(name==='panel')renderDash();window.scrollTo({top:0,behavior:'instant'});document.title=(name==='anasayfa'?'Hizmet bul, teklif al':({'hizmetler':'Hizmetler','talepler':'İş Talepleri','talep-olustur':'Talep Oluştur','ustalar':'Ustalar','giris':'Giriş Yap','telefon-giris':'Telefonla Giriş','usta-kayit':'Usta Ol','paketler':'Üyelik Paketleri','panel':'Panelim','usta-detay':'Usta Profili'}[name]||'UstaCebim'))+' | UstaCebim'}
